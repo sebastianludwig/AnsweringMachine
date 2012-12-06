@@ -1,3 +1,4 @@
+require 'partials'
 
 #DataMapper::Logger.new(STDOUT, :debug)
 DataMapper::setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/server.db")
@@ -35,6 +36,8 @@ class MockServer < Sinatra::Base
     set :public_folder, 'public'
     set :show_exceptions, settings.development?
   end
+  
+  helpers Sinatra::Partials
 
   get '/index' do
     @requests = Response.all(:fields => [:path], :unique => true).map { |r| r.path }

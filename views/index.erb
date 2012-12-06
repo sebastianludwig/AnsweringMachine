@@ -8,6 +8,9 @@
          display: inline-block;
          width: 8em;
        }
+       li {
+         margin-bottom: 1em;
+       }
     </style>
   </head>
   <body>
@@ -44,29 +47,13 @@
 
     <h1>Scheduled</h1>
     <ul>
-      <% @scheduled_responses.each do |response| %>
-        <li>
-          <%= "#{response.path} @#{response.http_status} #{response.requested_at.to_s}" %><br />
-          <form action="/response/<%= response.id %>" method="post">
-            <input type="submit" name="_method" value="delete"/>
-          </form>
-          <%= "#{response.body}" %>
-        </li>
-      <% end%>
+      <%= partial :item, :collection => @scheduled_responses %>
     </ul>
     
     
     <h1>Sent</h1>
     <ul>
-      <% @sent_responses.each do |response| %>
-        <li>
-          <%= "#{response.path} @#{response.http_status} #{response.requested_at.to_s}" %><br />
-          <form action="/response/<%= response.id %>" method="post">
-            <input type="submit" name="_method" value="delete"/>
-          </form>
-          <%= "#{response.body}" %>
-        </li>
-      <% end%>
+      <%= partial :item, :collection => @sent_responses %>
     </ul>
   </body>
 </html>

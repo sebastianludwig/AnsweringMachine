@@ -1,0 +1,7 @@
+<li>
+  <%= "#{item.path} @#{item.http_status} #{item.requested_at.to_s}" %><br />
+  <form action="/response/<%= item.id %>" method="post">
+    <input type="submit" name="_method" value="delete"/>
+  </form>
+  <%= "#{item.body}" %>
+</li>
