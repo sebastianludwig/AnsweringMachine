@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>Mock Server</title>
+  </head>
+  <body>
+    <h1>Recent requests</h1>
+    <ul>
+      <% @requests.reverse.each do |request| %>
+        <li><%= request.path %></li>
+      <% end%>
+    </ul>
+  </body>
+</html>
