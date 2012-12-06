@@ -1,12 +1,71 @@
+<!DOCTYPE HTML>
 <html>
   <head>
     <title>Mock Server</title>
+    
+    <style type="text/css">
+       label {
+         display: inline-block;
+         width: 8em;
+       }
+    </style>
   </head>
   <body>
-    <h1>Recent requests</h1>
+    <h1>Add response</h1>
+    <form method="post" action="/add">
+      <label for="path">Request</label>
+      <select name="path" id="path">
+        <% @requests.each do |request| %>
+          <%= "<option value=\"#{request}\">#{request}</option>" %>
+        <% end%>
+      </select>
+      <br />
+      
+      <label for="http_status">Status</label>
+      <select name="http_status" id="http_status">
+        <% [200, 400, 500].each do |status| %>
+          <%= "<option value=\"#{status}\">#{status}</option>" %>
+        <% end %>
+      </select>
+      <br />
+      
+      <label for="body">Response</label>
+      <textarea rows="4" cols="50" name="body" id="body"></textarea>
+      <br />
+      
+      <label for="resend">Resend</label>
+      <input type="checkbox" value="1" name="resend" id="resend"/>
+      <br />
+
+      <label for="submit"></label>
+      <input type="submit" name="submit" id="submit" value="Add" />
+    </form>
+
+
+    <h1>Scheduled</h1>
     <ul>
-      <% @requests.reverse.each do |request| %>
-        <li><%= request.path %></li>
+      <% @scheduled_responses.each do |response| %>
+        <li>
+          <%= "#{response.path} @#{response.http_status} #{response.requested_at.to_s}" %><br />
+          <form action="/response/<%= response.id %>" method="post">
+            <input type="submit" name="_method" value="delete"/>
+          </form>
+          <%= "#{response.body}" %>
+        </li>
+      <% end%>
+    </ul>
+    
+    
+    <h1>Sent</h1>
+    <ul>
+      <% @sent_responses.each do |response| %>
+        <li>
+          <%= "#{response.path} @#{response.http_status} #{response.requested_at.to_s}" %><br />
+          <form action="/response/<%= response.id %>" method="post">
+            <input type="submit" name="_method" value="delete"/>
+          </form>
+          <%= "#{response.body}" %>
+        </li>
       <% end%>
     </ul>
   </body>
