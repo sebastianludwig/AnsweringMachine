@@ -1,4 +1,5 @@
 require 'partials'
+require 'net/http'
 
 #DataMapper::Logger.new(STDOUT, :debug)
 DataMapper::setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/server.db")
@@ -10,7 +11,8 @@ class Response
   property :path, String, :index => :path
   property :http_status, Integer, :default => 200
   property :resend_counter, Integer, :default => 0
-  #property :forward, String
+  property :forward, String
+  #property :delay, Integer
   property :content_type, String
   property :body, String
   property :requested_at, DateTime
@@ -53,11 +55,13 @@ class MockServer < Sinatra::Base
   end
   
   post '/add' do
+    params[:forward].strip!
     Response.create(:path => params[:path], 
                     :body => params[:body], 
                     :http_status => params[:http_status].to_i,
                     :resend_counter => params[:resend_counter],
-                    :content_type => params[:content_type])
+                    :content_type => params[:content_type],
+                    :forward => params[:forward].empty? ? nil : params[:forward])
     
     redirect '/index'
   end
@@ -77,7 +81,6 @@ class MockServer < Sinatra::Base
     redirect '/index'
   end
   
-  
   get '/*' do
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
@@ -90,8 +93,35 @@ class MockServer < Sinatra::Base
     response.attributes = { :resend_counter => response.resend_counter-1 } if response.resend_counter > 0
     response.save
     
+    if response.forward
+      uri = URI(response.forward)
+      req = Net::HTTP::Get.new(uri.request_uri)
+      
+      forward_headers(request).each { |name, value| req[name] = value }
+
+      res = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+      
+      header = {}
+      res.each_header do |name, value|
+        header[name] = value unless %w(transfer-encoding).include? name
+      end
+      
+      status res.code.to_i
+      headers header
+      body(res.body) if res.class.body_permitted?
+      return
+    end
+    
     content_type response.content_type
     status response.http_status
     body response.body
+  end
+  
+private
+
+  def forward_headers(request)
+    headers = request.env.select { |name, value| name.start_with? 'HTTP_' }
+    headers.map! { |name, value| [name.sub(/^HTTP_/, ''), value] }
+    Hash[*headers.flatten].delete_if { |name, value| %w(HOST VERSION ORIGIN).include? name }
   end
 end
