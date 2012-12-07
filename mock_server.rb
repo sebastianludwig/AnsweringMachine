@@ -78,7 +78,7 @@ class MockServer < Sinatra::Base
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
     
-    response = Response.scheduled.first(:path => path)
+    response = Response.scheduled.last(:path => path)
     if !response
       response = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
