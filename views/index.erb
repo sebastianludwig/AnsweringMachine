@@ -36,8 +36,14 @@
       <textarea rows="4" cols="50" name="body" id="body"></textarea>
       <br />
       
-      <label for="resend">Resend</label>
-      <input type="checkbox" value="1" name="resend" id="resend"/>
+      <label for="resend_counter">Resend</label>
+      <select name="resend_counter" id="resend_counter">
+        <option value="0">No</option>
+        <option value="-1">Infinite</option>
+        <% 1.upto(10) do |i| %>
+          <%= "<option value=\"#{i}\">#{i} times</option>" %>
+        <% end %>
+      </select>
       <br />
 
       <label for="submit"></label>

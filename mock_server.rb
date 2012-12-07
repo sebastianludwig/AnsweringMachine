@@ -9,7 +9,7 @@ class Response
   property :id, Serial
   property :path, String, :index => :path
   property :http_status, Integer, :default => 200
-  property :resend, Boolean, :default => false
+  property :resend_counter, Integer, :default => 0
   #property :forward, String
   #property :conent_type, String
   property :body, String
@@ -22,7 +22,7 @@ class Response
   end
   
   def self.scheduled
-    all(:conditions => [ "requested_at IS NULL OR resend = 't'" ])
+    all(:conditions => [ "requested_at IS NULL OR resend_counter <> 0" ])
   end
 end
 
@@ -48,6 +48,23 @@ class MockServer < Sinatra::Base
     erb :index    
   end
   
+  post '/add' do
+    Response.create(:path => params[:path], 
+                    :body => params[:body], 
+                    :http_status => params[:http_status].to_i,
+                    :resend_counter => params[:resend_counter])
+    
+    redirect '/index'
+  end
+  
+  put '/resend/:id' do |id|
+    response = Response.get(id)
+    response.attributes = { :resend_counter => 1 } if response
+    response.save
+    
+    redirect '/index'
+  end
+  
   delete '/response/:id' do |id|
     response = Response.get(id)
     response.destroy if response
@@ -55,14 +72,6 @@ class MockServer < Sinatra::Base
     redirect '/index'
   end
   
-  post '/add' do
-    Response.create(:path => params[:path], 
-                    :body => params[:body], 
-                    :http_status => params[:http_status].to_i,
-                    :resend => (params[:resend] == '1'))
-    
-    redirect '/index'
-  end
   
   get '/*' do
     path = params[:splat].first
@@ -73,6 +82,7 @@ class MockServer < Sinatra::Base
       response = Response.create(:path => path, :body => 'default', :http_status => 200)
     end
     response.attributes = { :requested_at => Time.now }
+    response.attributes = { :resend_counter => response.resend_counter-1 } if response.resend_counter > 0
     response.save
 
     status response.http_status
