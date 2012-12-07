@@ -88,6 +88,6 @@ class MockServer < Sinatra::Base
     
     content_type response.content_type
     status response.http_status
-    body "{ 'attr': " + response.body + "}"
+    body response.body
   end
 end
