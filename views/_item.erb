@@ -6,5 +6,5 @@
   <form action="/response/<%= item.id %>" method="post">
     <input type="submit" name="_method" value="delete"/>
   </form>
-  <%= "#{item.body}" %>
+  <%=h "#{item.body}" %>
 </li>

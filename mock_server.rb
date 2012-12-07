@@ -38,6 +38,10 @@ class MockServer < Sinatra::Base
   end
   
   helpers Sinatra::Partials
+  helpers do
+    include Rack::Utils
+    alias_method :h, :escape_html
+  end
 
   get '/index' do
     @requests = Response.all(:fields => [:path], :unique => true).map { |r| r.path }
