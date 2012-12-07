@@ -11,7 +11,7 @@ class Response
   property :http_status, Integer, :default => 200
   property :resend_counter, Integer, :default => 0
   #property :forward, String
-  #property :conent_type, String
+  property :content_type, String
   property :body, String
   property :requested_at, DateTime
   
@@ -52,7 +52,8 @@ class MockServer < Sinatra::Base
     Response.create(:path => params[:path], 
                     :body => params[:body], 
                     :http_status => params[:http_status].to_i,
-                    :resend_counter => params[:resend_counter])
+                    :resend_counter => params[:resend_counter],
+                    :content_type => params[:content_type])
     
     redirect '/index'
   end
@@ -79,13 +80,14 @@ class MockServer < Sinatra::Base
     
     response = Response.scheduled.first(:path => path)
     if !response
-      response = Response.create(:path => path, :body => 'default', :http_status => 200)
+      response = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
     response.attributes = { :requested_at => Time.now }
     response.attributes = { :resend_counter => response.resend_counter-1 } if response.resend_counter > 0
     response.save
-
+    
+    content_type response.content_type
     status response.http_status
-    body response.body
+    body "{ 'attr': " + response.body + "}"
   end
 end
