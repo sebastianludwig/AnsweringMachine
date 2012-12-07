@@ -8,13 +8,13 @@ DataMapper::Model.raise_on_save_failure = true  # globally across all models
 class Response
   include DataMapper::Resource
   property :id, Serial
-  property :path, String, :index => :path
+  property :path, String, :index => :path, :length => 256
   property :http_status, Integer, :default => 200
   property :resend_counter, Integer, :default => 0
-  property :forward, String
+  property :forward, String, :length => 256
   #property :delay, Integer
   property :content_type, String
-  property :body, String
+  property :body, Text
   property :requested_at, DateTime
   
   default_scope(:default).update(:order => [:requested_at.desc])
@@ -85,36 +85,36 @@ class MockServer < Sinatra::Base
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
     
-    response = Response.scheduled.last(:path => path)
-    if !response
-      response = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
+    res = Response.scheduled.last(:path => path)
+    if !res
+      res = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
-    response.attributes = { :requested_at => Time.now }
-    response.attributes = { :resend_counter => response.resend_counter-1 } if response.resend_counter > 0
-    response.save
+    res.attributes = { :requested_at => Time.now }
+    res.attributes = { :resend_counter => res.resend_counter-1 } if res.resend_counter > 0
+    res.save
     
-    if response.forward
-      uri = URI(response.forward)
+    if res.forward
+      uri = URI(res.forward)
       req = Net::HTTP::Get.new(uri.request_uri)
       
       forward_headers(request).each { |name, value| req[name] = value }
 
-      res = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+      result = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
       
       header = {}
-      res.each_header do |name, value|
+      result.each_header do |name, value|
         header[name] = value unless %w(transfer-encoding).include? name
       end
       
-      status res.code.to_i
+      status result.code.to_i
       headers header
-      body(res.body) if res.class.body_permitted?
+      body(result.body) if result.class.body_permitted?
       return
     end
     
-    content_type response.content_type
-    status response.http_status
-    body response.body
+    content_type res.content_type
+    status res.http_status
+    body res.body
   end
   
 private
