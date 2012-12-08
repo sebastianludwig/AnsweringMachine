@@ -1,0 +1,11 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %title Mock Server
+    %link{:href => "css/bootstrap.css", :media => "screen", :rel => "stylesheet"}
+    %link{:href => "css/application.css", :media => "screen", :rel => "stylesheet"}
+  %body
+    = yield
+
+    %script{:src => "http://code.jquery.com/jquery-latest.js"}
+    %script{:src => "js/bootstrap.js"}

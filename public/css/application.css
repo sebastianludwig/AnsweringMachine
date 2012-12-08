@@ -1,0 +1,13 @@
+body {
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
+.form-horizontal .control-group {
+  margin-bottom: 10px;
+}
+
+td form {
+  margin: 0px;
+  display: inline-block;
+}

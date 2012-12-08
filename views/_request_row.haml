@@ -1,0 +1,13 @@
+%tr
+  %td= request_row.path
+  %td= request_row.content_type
+  %td= request_row.http_status
+  %td= request_row.body
+  %td= request_row.requested_at.to_s
+  %td
+    %form{:action => "/resend/#{request_row.id}", :method => "post"}
+      %input{:type => "hidden", :name => "_method", :value => "put"}
+      %input.btn.btn-inverse.btn-mini{:type => "submit", :value => "Resend"}
+    %form{:action => "/response/#{request_row.id}", :method => "post"}
+      %input{:type => "hidden", :name => "_method", :value => "delete"}
+      %input.btn.btn-danger.btn-mini{:type => "submit", :value => "Delete"}

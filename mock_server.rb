@@ -51,7 +51,7 @@ class MockServer < Sinatra::Base
     @sent_responses = Response.sent
     @scheduled_responses = Response.scheduled
     
-    erb :index    
+    haml :index, :format => :html5
   end
   
   post '/add' do

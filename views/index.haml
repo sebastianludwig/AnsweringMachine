@@ -1,0 +1,57 @@
+%h1 Add response
+
+%form.form-horizontal{:method => "post", :action => "/add"}
+  .control-group
+    %label.control-label{:for => "path"} Request
+    .controls
+      %select#path{:name => "path"}
+        - @requests.each do |request|
+          %option{:value => "#{request}"}= request
+  .control-group
+    %label.control-label{:for => "http_status"} Status
+    .controls
+      %select#http_status{:name => "http_status"}
+        - [200, 400, 500].each do |status|
+          %option{:value => "#{status}"}= status
+  .control-group
+    %label.control-label{:for => "content_type"} Conent
+    .controls
+      %select#content_type{:name => "conent_type"}
+        - %(text/html application/json application/javascript).each do |type|
+          %option{:value => "type"}= type
+  .control-group
+    %label.control-label{:for => "body"} Response
+    .controls
+      %textarea#body{:name => "body"}
+  .control-group
+    %label.control-label{:for => "forward"} Forward
+    .controls
+      %input#forward{:type => "text", :name => "forward"}
+  .control-group
+    %label.control-label{:for => "resend_counter"} Resend
+    .controls
+      %select#resend_counter{:name => "resend_counter"}
+        %option{:value => "0"} No
+        %option{:value => "-1"} Infinite
+        %option{:value => "1"} 1 time
+        - 2.upto(10) do |i|
+          %option{:value => "1"}= "#{i} times"
+  .control-group
+    %label.control-label{:for => "delay"} Delay
+    .controls
+      %input#delay{:type => "text", :name => "delay"}
+  .control-group
+    .controls
+      %input.btn.btn-primary{:type => "submit", :value => "Add"}
+
+%h1 Scheduled
+
+%table.table.table-striped.table-bordered.table-condensed
+  %tbody
+    = partial :request_row, :collection => @scheduled_responses
+
+%h1 Sent
+
+%table.table.table-striped.table-bordered.table-condensed
+  %tbody
+    = partial :request_row, :collection => @sent_responses    
