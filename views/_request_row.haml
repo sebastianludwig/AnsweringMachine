@@ -1,9 +1,10 @@
 %tr
   %td= request_row.path
   %td= request_row.content_type
-  %td= request_row.http_status
-  %td= request_row.body
-  %td= request_row.requested_at.to_s
+  %td
+    %span.label{:class => css_class_for_http_status(request_row.http_status)}= request_row.http_status
+  %td=h truncate(request_row.body)
+  %td= request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
   %td
     %form{:action => "/resend/#{request_row.id}", :method => "post"}
       %input{:type => "hidden", :name => "_method", :value => "put"}

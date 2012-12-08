@@ -1,5 +1,7 @@
-require 'partials'
 require 'net/http'
+
+require 'partials'
+require 'view_helper'
 
 #DataMapper::Logger.new(STDOUT, :debug)
 DataMapper::setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/server.db")
@@ -40,6 +42,7 @@ class MockServer < Sinatra::Base
   end
   
   helpers Sinatra::Partials
+  helpers ViewHelper
   helpers do
     include Rack::Utils
     alias_method :h, :escape_html

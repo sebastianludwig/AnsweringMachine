@@ -17,7 +17,7 @@
     %label.control-label{:for => "content_type"} Conent
     .controls
       %select#content_type{:name => "conent_type"}
-        - %(text/html application/json application/javascript).each do |type|
+        - %w(text/html application/json application/javascript).each do |type|
           %option{:value => "type"}= type
   .control-group
     %label.control-label{:for => "body"} Response
@@ -44,14 +44,20 @@
     .controls
       %input.btn.btn-primary{:type => "submit", :value => "Add"}
 
-%h1 Scheduled
+%h1 Responses
 
-%table.table.table-striped.table-bordered.table-condensed
-  %tbody
-    = partial :request_row, :collection => @scheduled_responses
+%ul.nav.nav-tabs
+  %li.active
+    %a{:href => "#scheduled", "data-toggle" => "tab"} Scheduled
+  %li
+    %a{:href => "#sent", "data-toggle" => "tab"} Sent
+.tab-content
+  .tab-pane.active#scheduled
+    %table.table.table-striped.table-bordered.table-condensed
+      %tbody
+        = partial :request_row, :collection => @scheduled_responses
+  .tab-pane#sent
+    %table.table.table-striped.table-bordered.table-condensed
+      %tbody
+        = partial :request_row, :collection => @sent_responses
 
-%h1 Sent
-
-%table.table.table-striped.table-bordered.table-condensed
-  %tbody
-    = partial :request_row, :collection => @sent_responses    
