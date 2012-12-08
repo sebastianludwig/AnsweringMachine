@@ -100,3 +100,16 @@ td form {
   font-family: monospace;
   width: 100%;
 }
+
+.response-body {
+  width: auto !important;
+  max-height: 20em !important;
+  overflow-y: scroll !important;
+  font-size: 10pt !important;
+}
+
+.prettyprint li,
+.prettyprint li > * {
+  font-size: 9pt !important;
+  line-height: 12pt !important;
+}
