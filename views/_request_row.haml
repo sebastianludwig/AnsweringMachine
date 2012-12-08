@@ -1,14 +1,10 @@
-%tr
-  %td= request_row.path
-  %td= request_row.content_type
-  %td
+%li
+  .item-header
     %span.label{:class => css_class_for_http_status(request_row.http_status)}= request_row.http_status
-  %td=h truncate(request_row.body)
-  %td= request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
-  %td
-    %form{:action => "/resend/#{request_row.id}", :method => "post"}
-      %input{:type => "hidden", :name => "_method", :value => "put"}
-      %input.btn.btn-inverse.btn-mini{:type => "submit", :value => "Resend"}
-    %form{:action => "/response/#{request_row.id}", :method => "post"}
-      %input{:type => "hidden", :name => "_method", :value => "delete"}
-      %input.btn.btn-danger.btn-mini{:type => "submit", :value => "Delete"}
+    %span.show-body.response-title= request_row.path
+    %span.right
+      = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
+      %a.icon-refresh.put{:href => "/resend/#{request_row.id}"}
+      %a.icon-trash.delete{:href => "/response/#{request_row.id}"}
+  %pre.response-body.pre-scrollable
+    = h request_row.body

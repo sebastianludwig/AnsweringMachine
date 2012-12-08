@@ -53,11 +53,8 @@
     %a{:href => "#sent", "data-toggle" => "tab"} Sent
 .tab-content
   .tab-pane.active#scheduled
-    %table.table.table-striped.table-bordered.table-condensed
-      %tbody
-        = partial :request_row, :collection => @scheduled_responses
+    %ul.unstyled.list-striped.list-hover
+      = partial :request_row, :collection => @scheduled_responses
   .tab-pane#sent
-    %table.table.table-striped.table-bordered.table-condensed
-      %tbody
-        = partial :request_row, :collection => @sent_responses
-
+    %ul.unstyled.list-striped.list-hover
+      = partial :request_row, :collection => @sent_responses
