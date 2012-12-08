@@ -3,8 +3,73 @@ body {
   padding-right: 2em;
 }
 
+.hidden {
+  display: none !important;
+}
+
+.form-horizontal {
+  display: inline-block;
+}
+
+.form-horizontal .input-append {
+  display: block;
+}
+
 .form-horizontal .control-group {
   margin-bottom: 10px;
+}
+
+.form-horizontal .control-label {
+  width: 13em;
+}
+
+.form-horizontal .controls {
+  margin-left: 14em;
+}
+
+.form-horizontal .nav-tabs {
+  width: 7em;
+  margin-right: 0px;
+  border-right: 0px;
+}
+
+.form-horizontal .tabbable {
+  display: table;
+}
+
+.form-horizontal .nav-tabs {
+  display: table-cell;
+}
+
+.form-horizontal .tab-pane {
+  padding-top: 10px;
+  padding-right: 10px;
+}
+
+.form-horizontal .tab-content {
+  display: table-cell;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-horizontal .tab-content .control-label {
+  width: 6em;
+}
+
+.form-horizontal .tab-content .controls {
+  margin-left: 7em;
+}
+
+.controls .btn-group {
+  width: 100%;
+}
+
+.controls .btn-group .btn {
+  width: 34%;
+}
+
+input[type='number'] {
+  text-align: right;
 }
 
 td form {

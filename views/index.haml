@@ -7,26 +7,39 @@
       %select#path{:name => "path"}
         - @requests.each do |request|
           %option{:value => "#{request}"}= request
-  .control-group
-    %label.control-label{:for => "http_status"} Status
-    .controls
-      %select#http_status{:name => "http_status"}
-        - [200, 400, 500].each do |status|
-          %option{:value => "#{status}"}= status
-  .control-group
-    %label.control-label{:for => "content_type"} Conent
-    .controls
-      %select#content_type{:name => "conent_type"}
-        - %w(text/html application/json application/javascript).each do |type|
-          %option{:value => "type"}= type
-  .control-group
-    %label.control-label{:for => "body"} Response
-    .controls
-      %textarea#body{:name => "body"}
-  .control-group
-    %label.control-label{:for => "forward"} Forward
-    .controls
-      %input#forward{:type => "text", :name => "forward"}
+          
+  .control-group.tabbable.tabs-left
+    %ul.nav.nav-tabs
+      %li.active
+        %a{:href => "#tab_respond", "data-toggle" => "tab"} Respond
+      %li
+        %a{:href => "#tab_forward", "data-toggle" => "tab"} Forward
+    .tab-content
+      .tab-pane.active#tab_respond
+        .control-group
+          %label.control-label{:for => "http_status"} Status
+          .controls
+            %input.hidden#http_status{:name => "http_status", :value => "200"}
+            .btn-group{"data-toggle" => "buttons-radio"}
+              %button.btn.btn-success.btn-small.active{:type => "button", :value => "200"} 200
+              %button.btn.btn-danger.btn-small{:type => "button", :value => "400"} 400
+              %button.btn.btn-inverse.btn-small{:type => "button", :value => "500"} 500
+        .control-group
+          %label.control-label{:for => "content_type"} Conent
+          .controls
+            %select#content_type{:name => "conent_type"}
+              - %w(text/html application/json application/javascript).each do |type|
+                %option{:value => "type"}= type
+        .control-group
+          %label.control-label{:for => "body"} Response
+          .controls
+            %textarea#body{:name => "body"}
+      .tab-pane#tab_forward
+        .control-group
+          %label.control-label{:for => "forward"} Forward
+          .controls
+            %input#forward{:type => "text", :name => "forward", :placeholder => "URL"}
+            
   .control-group
     %label.control-label{:for => "resend_counter"} Resend
     .controls
@@ -39,7 +52,9 @@
   .control-group
     %label.control-label{:for => "delay"} Delay
     .controls
-      %input#delay{:type => "text", :name => "delay"}
+      .input-append
+        %input.input-mini#delay{:name => "delay", :type => "number", :step => "0.5", :placeholder => "0"}
+        %span.add-on sec
   .control-group
     .controls
       %input.btn.btn-primary{:type => "submit", :value => "Add"}
@@ -48,13 +63,13 @@
 
 %ul.nav.nav-tabs
   %li.active
-    %a{:href => "#scheduled", "data-toggle" => "tab"} Scheduled
+    %a{:href => "#tab_scheduled", "data-toggle" => "tab"} Scheduled
   %li
-    %a{:href => "#sent", "data-toggle" => "tab"} Sent
+    %a{:href => "#tab_sent", "data-toggle" => "tab"} Sent
 .tab-content
-  .tab-pane.active#scheduled
+  .tab-pane.active#tab_scheduled
     %ul.unstyled.list-striped.list-hover
       = partial :request_row, :collection => @scheduled_responses
-  .tab-pane#sent
+  .tab-pane#tab_sent
     %ul.unstyled.list-striped.list-hover
       = partial :request_row, :collection => @sent_responses

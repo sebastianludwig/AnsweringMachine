@@ -14,7 +14,7 @@ class Response
   property :http_status, Integer, :default => 200
   property :resend_counter, Integer, :default => 0
   property :forward, String, :length => 256
-  property :delay, Integer, :default => 0
+  property :delay, Float, :default => 0
   property :content_type, String
   property :body, Text
   property :requested_at, DateTime
@@ -65,7 +65,7 @@ class MockServer < Sinatra::Base
                     :resend_counter => params[:resend_counter],
                     :content_type => params[:content_type],
                     :forward => params[:forward].empty? ? nil : params[:forward],
-                    :delay => params[:delay].to_i)
+                    :delay => params[:delay].to_f)
     
     redirect '/index'
   end
