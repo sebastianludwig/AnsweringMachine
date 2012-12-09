@@ -11,11 +11,11 @@
         - if request_row.forward
           %i.icon-forward
           = request_row.forward
-      - if request_row.resend_counter > 1 || request_row.resend_counter == -1
-        %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "Repeat #{repeat_description(request_row.resend_counter)}"}
+      - if request_row.repeat_counter > 1 || request_row.repeat_counter == -1
+        %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "Repeat #{repeat_description(request_row.repeat_counter)}"}
           %i.icon-refresh.icon-white
-          - if request_row.resend_counter > 1
-            = "#{request_row.resend_counter}"
+          - if request_row.repeat_counter > 1
+            = "#{request_row.repeat_counter}"
       -if request_row.delay > 0
         %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "#{request_row.delay} seconds delayed"}
           %i.icon-time.icon-white

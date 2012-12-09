@@ -12,7 +12,7 @@ class Response
   property :id, Serial
   property :path, String, :index => :path, :length => 256
   property :http_status, Integer, :default => 200
-  property :resend_counter, Integer, :default => 0
+  property :repeat_counter, Integer, :default => 0
   property :forward, String, :length => 256
   property :delay, Float, :default => 0
   property :content_type, String
@@ -26,7 +26,7 @@ class Response
   end
   
   def self.scheduled
-    all(:conditions => [ "requested_at IS NULL OR resend_counter <> 0" ])
+    all(:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ])
   end
 end
 
@@ -62,7 +62,7 @@ class MockServer < Sinatra::Base
     Response.create(:path => params[:path], 
                     :body => params[:body], 
                     :http_status => params[:http_status].to_i,
-                    :resend_counter => params[:resend_counter],
+                    :repeat_counter => params[:repeat_counter],
                     :content_type => params[:content_type],
                     :forward => params[:forward].empty? ? nil : params[:forward],
                     :delay => params[:delay].to_f)
@@ -72,8 +72,10 @@ class MockServer < Sinatra::Base
   
   put '/a-machine/resend/:id' do |id|
     response = Response.get(id)
-    response.attributes = { :resend_counter => 1 } if response
-    response.save
+    if response
+      response.attributes = { :repeat_counter => 1 }
+      response.save
+    end
     
     redirect '/a-machine'
   end
@@ -94,7 +96,7 @@ class MockServer < Sinatra::Base
       res = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
     res.attributes = { :requested_at => Time.now }
-    res.attributes = { :resend_counter => res.resend_counter-1 } if res.resend_counter > 0
+    res.attributes = { :repeat_counter => res.repeat_counter-1 } if res.repeat_counter > 0
     res.save
     
     sleep res.delay if res.delay > 0
