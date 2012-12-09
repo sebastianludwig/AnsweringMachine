@@ -16,9 +16,9 @@
     %span.right
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
       - if resend
-        %a.put{:href => "/resend/#{request_row.id}"}
+        %a.put{:href => "/a-machine/resend/#{request_row.id}"}
           %i.icon-repeat
-      %a.delete{:href => "/response/#{request_row.id}"}
+      %a.delete{:href => "/a-machine/response/#{request_row.id}"}
         %i.icon-trash
   %pre.response-body.highlight
     = h request_row.body

@@ -48,7 +48,7 @@ class MockServer < Sinatra::Base
     alias_method :h, :escape_html
   end
 
-  get '/index' do
+  get '/a-machine' do
     @requests = Response.all(:fields => [:path], :unique => true).map { |r| r.path }
     
     @sent_responses = Response.sent
@@ -57,7 +57,7 @@ class MockServer < Sinatra::Base
     haml :index, :format => :html5
   end
   
-  post '/add' do
+  post '/a-machine/add' do
     params[:forward].strip!
     Response.create(:path => params[:path], 
                     :body => params[:body], 
@@ -67,22 +67,22 @@ class MockServer < Sinatra::Base
                     :forward => params[:forward].empty? ? nil : params[:forward],
                     :delay => params[:delay].to_f)
     
-    redirect '/index'
+    redirect '/a-machine'
   end
   
-  put '/resend/:id' do |id|
+  put '/a-machine/resend/:id' do |id|
     response = Response.get(id)
     response.attributes = { :resend_counter => 1 } if response
     response.save
     
-    redirect '/index'
+    redirect '/a-machine'
   end
   
-  delete '/response/:id' do |id|
+  delete '/a-machine/response/:id' do |id|
     response = Response.get(id)
     response.destroy if response
     
-    redirect '/index'
+    redirect '/a-machine'
   end
   
   get '/*' do
