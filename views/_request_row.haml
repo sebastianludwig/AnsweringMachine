@@ -1,10 +1,16 @@
 %li
   .item-header
     %span.label{:class => css_class_for_http_status(request_row.http_status)}= request_row.http_status
-    %span.show-body.response-title= request_row.path
+    %span.show-body.response-title
+      = request_row.path
+      -if request_row.delay > 0
+        %i.icon-time{:style => "margin-left: 2em"}
+        = "#{request_row.delay}s"
     %span.right
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
-      %a.icon-refresh.put{:href => "/resend/#{request_row.id}"}
-      %a.icon-trash.delete{:href => "/response/#{request_row.id}"}
+      %a.put{:href => "/resend/#{request_row.id}"}
+        %i.icon-repeat
+      %a.delete{:href => "/response/#{request_row.id}"}
+        %i.icon-trash
   %pre.response-body.highlight
     = h request_row.body
