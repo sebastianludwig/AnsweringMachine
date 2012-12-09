@@ -7,60 +7,61 @@ module ViewHelper
     return ''
   end
   
-  def http_status_codes(group)
-    return [
-      { :code => 200, :name => "OK" },
-      { :code => 201, :name => "Created" },
-      { :code => 202, :name => "Accepted" },
-      { :code => 203, :name => "Non-Authoritative Information" },
-      { :code => 204, :name => "No Content" },
-      { :code => 205, :name => "Reset Content" },
-      { :code => 206, :name => "Partial Content" }
-    ] if group == :successful
-    
-    return [
-      { :code => 300, :name => "Multiple Choices" },
-      { :code => 301, :name => "Moved Permanently" },
-      { :code => 302, :name => "Found" },
-      { :code => 303, :name => "See Other" },
-      { :code => 304, :name => "Not Modified" },
-      { :code => 306, :name => "Switch Proxy" },
-      { :code => 307, :name => "Temporary Redirect" },
-      { :code => 308, :name => "Resume Incomplete" }
-    ] if group == :redirection
-    
-    return [
-      { :code => 400, :name => "Bad Request" },
-      { :code => 401, :name => "Unauthorized" },
-      { :code => 402, :name => "Payment Required" },
-      { :code => 403, :name => "Forbidden" },
-      { :code => 404, :name => "Not Found" },
-      { :code => 405, :name => "Method Not Allowed" },
-      { :code => 406, :name => "Not Acceptable" },
-      { :code => 407, :name => "Proxy Authentication Required" },
-      { :code => 408, :name => "Request Timeout" },
-      { :code => 409, :name => "Conflict" },
-      { :code => 410, :name => "Gone" },
-      { :code => 411, :name => "Length Required" },
-      { :code => 412, :name => "Precondition Failed" },
-      { :code => 413, :name => "Request Entity Too Large" },
-      { :code => 414, :name => "Request-URI Too Long" },
-      { :code => 415, :name => "Unsupported Media Type" },
-      { :code => 416, :name => "Requested Range Not Satisfiable" },
-      { :code => 417, :name => "Expectation Failed" },
-      { :code => 418, :name => "I'm a teapot" }
-    ] if group == :client_error
-    
-    return [
-      { :code => 500, :name => "Internal Server Error" },
-      { :code => 501, :name => "Not Implemented" },
-      { :code => 502, :name => "Bad Gateway" },
-      { :code => 503, :name => "Service Unavailable" },
-      { :code => 504, :name => "Gateway Timeout" },
-      { :code => 505, :name => "HTTP Version Not Supported" },
-      { :code => 511, :name => "Network Authentication Required" }
-    ] if group == :server_error
-    
-    return []
+  def repeat_description(count)
+    case count
+      when 0 then "no"
+      when -1 then "infinitely"
+      when 1 then "1 time"
+      else "#{count} times"
+    end
+  end
+  
+  def http_status_name(code)
+    case code
+      when 200 then "OK"
+      when 201 then "Created"
+      when 202 then "Accepted"
+      when 203 then "Non-Authoritative Information"
+      when 204 then "No Content"
+      when 205 then "Reset Content"
+      when 206 then "Partial Content"
+
+      when 300 then "Multiple Choices"
+      when 301 then "Moved Permanently"
+      when 302 then "Found"
+      when 303 then "See Other"
+      when 304 then "Not Modified"
+      when 306 then "Switch Proxy"
+      when 307 then "Temporary Redirect"
+      when 308 then "Resume Incomplete"
+
+      when 400 then "Bad Request"
+      when 401 then "Unauthorized"
+      when 402 then "Payment Required"
+      when 403 then "Forbidden"
+      when 404 then "Not Found"
+      when 405 then "Method Not Allowed"
+      when 406 then "Not Acceptable"
+      when 407 then "Proxy Authentication Required"
+      when 408 then "Request Timeout"
+      when 409 then "Conflict"
+      when 410 then "Gone"
+      when 411 then "Length Required"
+      when 412 then "Precondition Failed"
+      when 413 then "Request Entity Too Large"
+      when 414 then "Request-URI Too Long"
+      when 415 then "Unsupported Media Type"
+      when 416 then "Requested Range Not Satisfiable"
+      when 417 then "Expectation Failed"
+      when 418 then "I'm a teapot"
+
+      when 500 then "Internal Server Error"
+      when 501 then "Not Implemented"
+      when 502 then "Bad Gateway"
+      when 503 then "Service Unavailable"
+      when 504 then "Gateway Timeout"
+      when 505 then "HTTP Version Not Supported"
+      else "Unknown"
+    end
   end
 end

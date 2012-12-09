@@ -127,6 +127,10 @@ td form {
   margin-bottom: 3pt;
 }
 
+.item-header > a:hover {
+  cursor: default;
+}
+
 .item-header > span {
   display: table-cell;
 }
@@ -145,6 +149,7 @@ td form {
 .response-title {
   padding-left: 5pt;
   width: 100%;
+  cursor: pointer;
 }
 
 .response-title .path {

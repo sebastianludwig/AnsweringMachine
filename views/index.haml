@@ -27,32 +27,32 @@
               %button.btn.btn-success.btn-small.dropdown_button{:type => "button", "data-toggle" => "dropdown"}
                 %span.caret
               %ul.dropdown-menu{:role => "menu"}
-                - http_status_codes(:successful).each do |status|
-                  = partial :status_code, :locals => status
+                - 200.upto(206) do |status|
+                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
             .btn-group
               %span
               %button.btn.btn-warning.btn-small.status_button{:type => "button"} 300
               %button.btn.btn-warning.btn-small.dropdown_button{:type => "button", "data-toggle" => "dropdown"}
                 %span.caret
               %ul.dropdown-menu{:role => "menu"}
-                - http_status_codes(:redirection).each do |status|
-                  = partial :status_code, :locals => status
+                - 300.upto(308) do |status|
+                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
             .btn-group
               %span
               %button.btn.btn-danger.btn-small.status_button{:type => "button"} 400
               %button.btn.btn-danger.btn-small.dropdown_button{:type => "button", "data-toggle" => "dropdown"}
                 %span.caret
               %ul.dropdown-menu{:role => "menu"}
-                - http_status_codes(:client_error).each do |status|
-                  = partial :status_code, :locals => status
+                - 400.upto(418) do |status|
+                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
             .btn-group
               %span
               %button.btn.btn-inverse.btn-small.status_button{:type => "button"} 500
               %button.btn.btn-inverse.btn-small.dropdown_button.dropdown-toggle{:type => "button", "data-toggle" => "dropdown"}
                 %span.caret
               %ul.dropdown-menu{:role => "menu"}
-                - http_status_codes(:server_error).each do |status|
-                  = partial :status_code, :locals => status
+                - 500.upto(505) do |status|
+                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
         .control-group
           %label.control-label{:for => "content_type"} Conent
           .controls
@@ -73,11 +73,10 @@
     %label.control-label{:for => "resend_counter"} Resend
     .controls
       %select#resend_counter{:name => "resend_counter"}
-        %option{:value => "0"} No
-        %option{:value => "-1"} Infinite
-        %option{:value => "1"} 1 time
-        - 2.upto(10) do |i|
-          %option{:value => i}= "#{i} times"
+        - [0, -1, 1].each do |count|
+          %option{:value => count}= repeat_description(count).capitalize
+        - 2.upto(10) do |count|
+          %option{:value => count}= repeat_description(count).capitalize
   .control-group
     %label.control-label{:for => "delay"} Delay
     .controls

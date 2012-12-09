@@ -3,7 +3,7 @@
     - if request_row.forward
       %span
     - else
-      %span.label{:class => css_class_for_http_status(request_row.http_status)}
+      %a.label{:class => css_class_for_http_status(request_row.http_status), :rel => "tooltip", "data-placement" => "right", :title => http_status_name(request_row.http_status)}
         = request_row.http_status
     %span.show-body.response-title
       %span.path
@@ -12,20 +12,20 @@
           %i.icon-forward
           = request_row.forward
       - if request_row.resend_counter > 1 || request_row.resend_counter == -1
-        %span.label.label-info
+        %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "Repeat #{repeat_description(request_row.resend_counter)}"}
           %i.icon-refresh.icon-white
           - if request_row.resend_counter > 1
             = "#{request_row.resend_counter}"
       -if request_row.delay > 0
-        %span.label.label-info
+        %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "#{request_row.delay} seconds delayed"}
           %i.icon-time.icon-white
           = "#{request_row.delay}s"
     %span
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
       - if resend
-        %a.put{:href => "/a-machine/resend/#{request_row.id}"}
+        %a.put{:href => "/a-machine/resend/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}
           %i.icon-repeat
-      %a.delete{:href => "/a-machine/response/#{request_row.id}"}
+      %a.delete{:href => "/a-machine/response/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}
         %i.icon-trash
   - unless request_row.forward
     %pre.response-body.highlight
