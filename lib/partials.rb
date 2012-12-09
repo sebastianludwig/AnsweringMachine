@@ -9,13 +9,18 @@ module Sinatra::Partials
     options = args.last.is_a?(Hash) ? args.pop : {}
     options.merge!(:layout => false)
     if collection = options.delete(:collection) then
-      index = -1
       collection.inject([]) do |buffer, member|
-        index += 1
-        buffer << haml(:"#{template}", options.merge(:layout => false, :locals => {template_array[-1].to_sym => member, :index => index}))
+        buffer << haml(:"#{template}", deep_merge(options, :layout => false, :locals => {template_array[-1].to_sym => member}))
       end.join("\n")
     else
       haml(:"#{template}", options)
     end
+  end
+  
+  private
+  
+  def deep_merge(h1, h2)
+    merger = proc { |key,v1,v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    h1.merge(h2, &merger)
   end
 end

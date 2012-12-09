@@ -2,14 +2,22 @@
   .item-header
     %span.label{:class => css_class_for_http_status(request_row.http_status)}= request_row.http_status
     %span.show-body.response-title
-      = request_row.path
+      %span.path
+        = request_row.path
+      - if request_row.resend_counter > 1 || request_row.resend_counter == -1
+        %span.label.label-info
+          %i.icon-refresh.icon-white
+          - if request_row.resend_counter > 1
+            = "#{request_row.resend_counter}"
       -if request_row.delay > 0
-        %i.icon-time{:style => "margin-left: 2em"}
-        = "#{request_row.delay}s"
+        %span.label.label-info
+          %i.icon-time.icon-white
+          = "#{request_row.delay}s"
     %span.right
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
-      %a.put{:href => "/resend/#{request_row.id}"}
-        %i.icon-repeat
+      - if resend
+        %a.put{:href => "/resend/#{request_row.id}"}
+          %i.icon-repeat
       %a.delete{:href => "/response/#{request_row.id}"}
         %i.icon-trash
   %pre.response-body.highlight

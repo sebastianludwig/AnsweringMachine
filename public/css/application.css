@@ -127,15 +127,23 @@ td form {
   margin-bottom: 3pt;
 }
 
-.item-header span {
+.item-header > span {
   display: table-cell;
   white-space: nowrap;
 }
 
 .response-title {
   padding-left: 5pt;
-  font-family: monospace;
   width: 100%;
+}
+
+.response-title .path {
+  font-family: monospace;
+  margin-right: 3em;
+}
+
+.response-title .label {
+  margin-left: 0.5em;
 }
 
 .response-body {

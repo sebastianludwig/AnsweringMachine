@@ -16,7 +16,7 @@ class Response
   property :forward, String, :length => 256
   property :delay, Float, :default => 0
   property :content_type, String
-  property :body, Text
+  property :body, Text, :length => 500000
   property :requested_at, DateTime
   
   default_scope(:default).update(:order => [:requested_at.desc])

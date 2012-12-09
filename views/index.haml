@@ -77,7 +77,7 @@
         %option{:value => "-1"} Infinite
         %option{:value => "1"} 1 time
         - 2.upto(10) do |i|
-          %option{:value => "1"}= "#{i} times"
+          %option{:value => i}= "#{i} times"
   .control-group
     %label.control-label{:for => "delay"} Delay
     .controls
@@ -102,7 +102,7 @@
 .tab-content
   .tab-pane.active#tab_scheduled
     %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @scheduled_responses
+      = partial :request_row, :collection => @scheduled_responses, :locals => { :resend => false }
   .tab-pane#tab_sent
     %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @sent_responses
+      = partial :request_row, :collection => @sent_responses, :locals => { :resend => true }
