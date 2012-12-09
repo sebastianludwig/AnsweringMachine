@@ -131,6 +131,11 @@ td form {
   display: table-cell;
 }
 
+.item-header > span:first-child {
+  min-width: 2em;
+  text-align: center;
+}
+
 .item-header > span:last-child {
   white-space: nowrap;
   min-width: 6em;

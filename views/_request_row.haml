@@ -1,6 +1,10 @@
 %li
   .item-header
-    %span.label{:class => css_class_for_http_status(request_row.http_status)}= request_row.http_status
+    - if request_row.forward
+      %span
+    - else
+      %span.label{:class => css_class_for_http_status(request_row.http_status)}
+        = request_row.http_status
     %span.show-body.response-title
       %span.path
         = request_row.path
