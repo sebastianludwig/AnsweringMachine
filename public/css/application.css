@@ -129,7 +129,12 @@ td form {
 
 .item-header > span {
   display: table-cell;
+}
+
+.item-header > span:last-child {
   white-space: nowrap;
+  min-width: 6em;
+  text-align: right;
 }
 
 .response-title {

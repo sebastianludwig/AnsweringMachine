@@ -4,6 +4,9 @@
     %span.show-body.response-title
       %span.path
         = request_row.path
+        - if request_row.forward
+          %i.icon-forward
+          = request_row.forward
       - if request_row.resend_counter > 1 || request_row.resend_counter == -1
         %span.label.label-info
           %i.icon-refresh.icon-white
@@ -13,12 +16,13 @@
         %span.label.label-info
           %i.icon-time.icon-white
           = "#{request_row.delay}s"
-    %span.right
+    %span
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
       - if resend
         %a.put{:href => "/a-machine/resend/#{request_row.id}"}
           %i.icon-repeat
       %a.delete{:href => "/a-machine/response/#{request_row.id}"}
         %i.icon-trash
-  %pre.response-body.highlight
-    = h request_row.body
+  - unless request_row.forward
+    %pre.response-body.highlight
+      = h request_row.body
