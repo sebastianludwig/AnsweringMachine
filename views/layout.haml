@@ -2,8 +2,8 @@
 %html{:lang => "en"}
   %head
     %title A-Machine
-    %link{:href => "css/bootstrap.css", :media => "screen", :rel => "stylesheet"}
-    %link{:href => "css/application.css", :media => "screen", :rel => "stylesheet"}
+    %link{:href => "/css/bootstrap.css", :media => "screen", :rel => "stylesheet"}
+    %link{:href => "/css/application.css", :media => "screen", :rel => "stylesheet"}
   %body
     .navbar.navbar-inverse.navbar-static-top
       .navbar-inner
@@ -12,9 +12,9 @@
     .content
       = yield
 
-    %script{:src => "js/jquery-1.8.3.min.js"}
-    %script{:src => "js/bootstrap.js"}
-    %script{:src => "js/application.js"}
-    %script{:src => "syntaxhighlighter/scripts/jquery.syntaxhighlighter.min.js" }
+    %script{:src => "/js/jquery-1.8.3.min.js"}
+    %script{:src => "/js/bootstrap.js"}
+    %script{:src => "/js/application.js"}
+    %script{:src => "/syntaxhighlighter/scripts/jquery.syntaxhighlighter.min.js" }
     :javascript
       $.SyntaxHighlighter.init({'stripEmptyStartFinishLines': false, 'stripInitialWhitespace': false, 'prettifyBaseUrl': 'syntaxhighlighter/prettify', 'baseUrl': 'syntaxhighlighter'});

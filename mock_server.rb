@@ -72,7 +72,7 @@ class MockServer < Sinatra::Base
     alias_method :h, :escape_html
   end
 
-  get '/a-machine' do
+  get '/a-machine/?' do
     @requests = Response.all(:fields => [:path], :unique => true, :order => [:path.asc]).map { |r| r.path }
     
     @sent_responses = Response.sent

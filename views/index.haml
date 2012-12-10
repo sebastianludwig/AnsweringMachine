@@ -88,9 +88,7 @@
     %label.control-label{:for => "repeat_counter"} Repeat
     .controls
       %select#repeat_counter{:name => "repeat_counter"}
-        - [0, -1, 1].each do |count|
-          %option{:value => count}= repeat_description(count).capitalize
-        - 2.upto(10) do |count|
+        - [0, -1, (2..10).to_a].flatten.each do |count|
           %option{:value => count}= repeat_description(count).capitalize
   .control-group
     %label.control-label{:for => "delay"} Delay
