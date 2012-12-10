@@ -26,10 +26,17 @@
           = "#{request_row.delay}s"
     %span
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
+      - if display_pause
+        - if request_row.paused
+          %a.put{:href => "/a-machine/play/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Send again"}<
+            %i.icon-play
+        - else
+          %a.put{:href => "/a-machine/pause/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Pause sending"}<
+            %i.icon-pause
       - if display_resend_link
-        %a.put{:href => "/a-machine/resend/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}
+        %a.put{:href => "/a-machine/resend/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}<
           %i.icon-repeat
-      %a.delete{:href => "/a-machine/response/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}
+      %a.delete{:href => "/a-machine/response/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}<
         %i.icon-trash
   - unless request_row.forwards?
     %pre.response-body.highlight

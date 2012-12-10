@@ -13,6 +13,7 @@ class Response
   property :path, String, :index => :path, :length => 256
   property :http_status, Integer, :default => 200
   property :repeat_counter, Integer, :default => 0
+  property :paused, Boolean, :default => 0
   property :forward, String, :length => 256
   property :file, String, :length => 256
   property :tag, String, :length => 64
@@ -99,6 +100,26 @@ class MockServer < Sinatra::Base
     redirect '/a-machine'
   end
   
+  put '/a-machine/pause/:id' do |id|
+    response = Response.get(id)
+    if response
+      response.attributes = { :paused => 1 }
+      response.save
+    end
+    
+    redirect '/a-machine'
+  end
+  
+  put '/a-machine/play/:id' do |id|
+    response = Response.get(id)
+    if response
+      response.attributes = { :paused => 0 }
+      response.save
+    end
+    
+    redirect '/a-machine'
+  end
+  
   delete '/a-machine/response/:id' do |id|
     response = Response.get(id)
     response.destroy if response
@@ -110,7 +131,7 @@ class MockServer < Sinatra::Base
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
     
-    res = Response.scheduled(:path => path).first
+    res = Response.scheduled(:path => path, :paused => false).first
     if !res
       res = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
