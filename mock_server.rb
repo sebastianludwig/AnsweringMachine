@@ -61,6 +61,7 @@ class MockServer < Sinatra::Base
     set :public_folder, 'public'
     set :show_exceptions, settings.development?
     set :haml, :format => :html5
+    register Sinatra::Reloader if settings.development?
   end
   
   
