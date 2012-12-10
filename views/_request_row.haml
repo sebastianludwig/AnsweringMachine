@@ -11,6 +11,7 @@
         - if request_row.forward
           %i.icon-forward
           = request_row.forward
+      %span.label= request_row.tag
       - if request_row.repeat_counter > 1 || request_row.repeat_counter == -1
         %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "Repeat #{repeat_description(request_row.repeat_counter)}"}
           %i.icon-refresh.icon-white

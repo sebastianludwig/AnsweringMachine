@@ -14,6 +14,7 @@ class Response
   property :http_status, Integer, :default => 200
   property :repeat_counter, Integer, :default => 0
   property :forward, String, :length => 256
+  property :tag, String, :length => 64
   property :delay, Float, :default => 0
   property :content_type, String
   property :body, Text, :length => 500000
@@ -65,7 +66,8 @@ class MockServer < Sinatra::Base
                     :repeat_counter => params[:repeat_counter],
                     :content_type => params[:content_type],
                     :forward => params[:forward].empty? ? nil : params[:forward],
-                    :delay => params[:delay].to_f)
+                    :delay => params[:delay].to_f,
+                    :tag => params[:tag])
     
     redirect '/a-machine'
   end
