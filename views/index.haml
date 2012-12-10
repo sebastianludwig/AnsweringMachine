@@ -16,7 +16,11 @@
       %li
         %a{:href => "#tab_forward", "data-toggle" => "tab"}
           %i.icon-forward
+      %li
+        %a{:href => "#tab_file", "data-toggle" => "tab"}
+          %i.icon-file
     .tab-content
+    
       .tab-pane.active#tab_respond
         .control-group
           %label.control-label{:for => "http_status"} Status
@@ -63,11 +67,18 @@
           %label.control-label{:for => "body"} Response
           .controls
             %textarea#body{:name => "body"}
+            
       .tab-pane#tab_forward
         .control-group
           %label.control-label{:for => "forward"} Forward
           .controls
             %input#forward{:type => "text", :name => "forward", :placeholder => "URL"}
+            
+      .tab-pane#tab_file
+        .control-group
+          %label.control-label{:for => "file"} File
+          .controls
+            %input#file{:type => "text", :name => "file", :placeholder => "full path - try drag and drop"}
             
   .control-group
     %label.control-label{:for => "tag"} Tag
@@ -105,7 +116,7 @@
 .tab-content
   .tab-pane.active#tab_scheduled
     %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @scheduled_responses, :locals => { :resend => false }
+      = partial :request_row, :collection => @scheduled_responses, :locals => { :display_resend_link => false }
   .tab-pane#tab_sent
     %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @sent_responses, :locals => { :resend => true }
+      = partial :request_row, :collection => @sent_responses, :locals => { :display_resend_link => true }

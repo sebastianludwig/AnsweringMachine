@@ -14,6 +14,7 @@ class Response
   property :http_status, Integer, :default => 200
   property :repeat_counter, Integer, :default => 0
   property :forward, String, :length => 256
+  property :file, String, :length => 256
   property :tag, String, :length => 64
   property :delay, Float, :default => 0
   property :content_type, String
@@ -26,6 +27,22 @@ class Response
   
   def self.scheduled(options = {})
     all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:requested_at.asc]}))
+  end
+  
+  def repeats?
+    repeat_counter > 1 || repeat_counter == -1
+  end
+
+  def forwards?
+    forwards_to_url? || forwards_to_file?
+  end
+  
+  def forwards_to_url?
+    forward && !forward.empty?
+  end
+  
+  def forwards_to_file?
+    file && !file.empty?
   end
 end
 
@@ -58,12 +75,14 @@ class MockServer < Sinatra::Base
   
   post '/a-machine/add' do
     params[:forward].strip!
+    params[:file].strip!
     Response.create(:path => params[:path], 
                     :body => params[:body], 
                     :http_status => params[:http_status].to_i,
                     :repeat_counter => params[:repeat_counter],
                     :content_type => params[:content_type],
                     :forward => params[:forward].empty? ? nil : params[:forward],
+                    :file => params[:file].empty? ? nil : params[:file],
                     :delay => params[:delay].to_f,
                     :tag => params[:tag])
     
@@ -101,31 +120,44 @@ class MockServer < Sinatra::Base
     
     sleep res.delay if res.delay > 0
     
-    if res.forward
-      uri = URI(res.forward)
-      req = Net::HTTP::Get.new(uri.request_uri)
-      
-      forward_headers(request).each { |name, value| req[name] = value }
-
-      result = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
-      
-      header = {}
-      result.each_header do |name, value|
-        header[name] = value unless %w(transfer-encoding).include? name
-      end
-      
-      status result.code.to_i
-      headers header
-      body(result.body) if result.class.body_permitted?
-      return
+    status, headers, body = nil
+    if res.forwards_to_url?
+      status, headers, body = forwarded_response(res)
+    elsif res.forwards_to_file?
+      status, headers, body = file_response(res)
+    else
+      headers = { "Content-Type" => res.content_type }
+      status = res.http_status
+      body = res.body
     end
     
-    content_type res.content_type
-    status res.http_status
-    body replace_variables(res.body)
+    status(status)
+    headers(headers) if headers
+    body(replace_variables(body))
   end
   
 private
+
+  def forwarded_response(response)
+    uri = URI(response.forward)
+    req = Net::HTTP::Get.new(uri.request_uri)
+    
+    forward_headers(request).each { |name, value| req[name] = value }
+
+    result = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+    
+    headers = {}
+    result.each_header do |name, value|
+      headers[name] = value unless %w(transfer-encoding).include? name
+    end
+    
+    [result.code.to_i, headers, (result.body if result.class.body_permitted?)]
+  end
+  
+  def file_response(response)
+    content_type = IO.popen("file --brief --mime-type #{response.file}").read.chomp
+    [200, { "Content-Type" => content_type }, File.open(response.file, "r").read]
+  end
 
   def replace_variables(body)
     body.gsub(/\$\{timestamp\}/, Time.now.to_i.to_s).
