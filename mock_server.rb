@@ -20,14 +20,12 @@ class Response
   property :body, Text, :length => 500000
   property :requested_at, DateTime
   
-  default_scope(:default).update(:order => [:requested_at.desc])
-  
-  def self.sent
-    all(:conditions => [ 'requested_at IS NOT NULL' ])
+  def self.sent(options = {})
+    all(options.merge({:conditions => [ 'requested_at IS NOT NULL' ], :order => [:requested_at.desc]}))
   end
   
-  def self.scheduled
-    all(:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ])
+  def self.scheduled(options = {})
+    all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:requested_at.asc]}))
   end
 end
 
@@ -93,7 +91,7 @@ class MockServer < Sinatra::Base
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
     
-    res = Response.scheduled.last(:path => path)
+    res = Response.scheduled(:path => path).first
     if !res
       res = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
