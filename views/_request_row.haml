@@ -5,7 +5,7 @@
     - else
       %a.label{:class => css_class_for_http_status(request_row.http_status), :rel => "tooltip", "data-placement" => "right", :title => http_status_name(request_row.http_status)}
         = request_row.http_status
-    %span.show-body.response-title
+    %span.show-body.response-title{:class => ("pointer" if request_row.has_body?) }
       %span.path
         = request_row.path
         - if request_row.forwards_to_url?
@@ -38,6 +38,6 @@
           %i.icon-repeat
       %a.delete{:href => "/a-machine/response/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}<
         %i.icon-trash
-  - unless request_row.forwards?
+  - if request_row.has_body?
     %pre.response-body.highlight
       = h request_row.body

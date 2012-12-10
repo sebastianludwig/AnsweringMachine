@@ -2,6 +2,10 @@
   display: none !important;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .navbar-inner .brand {
   float: right;
   font-weight: bold;
@@ -149,7 +153,6 @@ td form {
 .response-title {
   padding-left: 5pt;
   width: 100%;
-  cursor: pointer;
 }
 
 .response-title .path {

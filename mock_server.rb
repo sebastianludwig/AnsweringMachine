@@ -45,6 +45,10 @@ class Response
   def forwards_to_file?
     file && !file.empty?
   end
+  
+  def has_body?
+    body && !body.empty?
+  end
 end
 
 DataMapper.finalize
@@ -56,7 +60,9 @@ class MockServer < Sinatra::Base
   configure do
     set :public_folder, 'public'
     set :show_exceptions, settings.development?
+    set :haml, :format => :html5
   end
+  
   
   helpers Sinatra::Partials
   helpers ViewHelper
@@ -66,12 +72,12 @@ class MockServer < Sinatra::Base
   end
 
   get '/a-machine' do
-    @requests = Response.all(:fields => [:path], :unique => true).map { |r| r.path }
+    @requests = Response.all(:fields => [:path], :unique => true, :order => [:path.asc]).map { |r| r.path }
     
     @sent_responses = Response.sent
     @scheduled_responses = Response.scheduled
     
-    haml :index, :format => :html5
+    haml :index
   end
   
   post '/a-machine/add' do
@@ -137,10 +143,11 @@ class MockServer < Sinatra::Base
     end
     res.attributes = { :requested_at => Time.now }
     res.attributes = { :repeat_counter => res.repeat_counter-1 } if res.repeat_counter > 0
-    res.save
-    
+
+    # delay
     sleep res.delay if res.delay > 0
     
+    # content
     status, headers, body = nil
     if res.forwards_to_url?
       status, headers, body = forwarded_response(res)
@@ -152,9 +159,11 @@ class MockServer < Sinatra::Base
       body = res.body
     end
     
-    status(status)
-    headers(headers) if headers
-    body(replace_variables(body))
+    res.body = body if res.forwards?
+    
+    res.save    # save before we return
+    
+    [status, (headers if headers), body(replace_variables(body))]
   end
   
 private
