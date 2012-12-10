@@ -124,10 +124,15 @@ class MockServer < Sinatra::Base
     
     content_type res.content_type
     status res.http_status
-    body res.body
+    body replace_variables(res.body)
   end
   
 private
+
+  def replace_variables(body)
+    body.gsub(/\$\{timestamp\}/, Time.now.to_i.to_s).
+        gsub(/\$\{eval:(.+)\}/) { Kernel.eval($1).to_s }
+  end
 
   def forward_headers(request)
     headers = request.env.select { |name, value| name.start_with? 'HTTP_' }
