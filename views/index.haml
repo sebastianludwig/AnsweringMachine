@@ -114,7 +114,7 @@
 .tab-content
   .tab-pane.active#tab_scheduled
     %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @scheduled_responses, :locals => { :display_resend_link => false, :display_pause => true }
+      = partial :request_row, :collection => @scheduled_responses, :locals => { :actions => [:pause, :delete] }
   .tab-pane#tab_sent
     %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @sent_responses, :locals => { :display_resend_link => true, :display_pause => false }
+      = partial :request_row, :collection => @sent_responses, :locals => { :actions => [:resend, :delete] }

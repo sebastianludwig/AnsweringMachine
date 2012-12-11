@@ -97,7 +97,7 @@ class MockServer < Sinatra::Base
     redirect '/a-machine'
   end
   
-  put '/a-machine/resend/:id' do |id|
+  put '/a-machine/:id/resend' do |id|
     response = Response.get(id)
     if response
       response.attributes = { :repeat_counter => 1 }
@@ -107,7 +107,7 @@ class MockServer < Sinatra::Base
     redirect '/a-machine'
   end
   
-  put '/a-machine/pause/:id' do |id|
+  put '/a-machine/:id/pause' do |id|
     response = Response.get(id)
     if response
       response.attributes = { :paused => 1 }
@@ -117,7 +117,7 @@ class MockServer < Sinatra::Base
     redirect '/a-machine'
   end
   
-  put '/a-machine/play/:id' do |id|
+  put '/a-machine/:id/play' do |id|
     response = Response.get(id)
     if response
       response.attributes = { :paused => 0 }
@@ -127,7 +127,7 @@ class MockServer < Sinatra::Base
     redirect '/a-machine'
   end
   
-  delete '/a-machine/response/:id' do |id|
+  delete '/a-machine/:id' do |id|
     response = Response.get(id)
     response.destroy if response
     

@@ -24,20 +24,21 @@
         %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "#{request_row.delay} seconds delayed"}
           %i.icon-time.icon-white
           = "#{request_row.delay}s"
-    %span
+    %span<
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
-      - if display_pause
+      - if actions.include? :pause
         - if request_row.paused
-          %a.put{:href => "/a-machine/play/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Send again"}<
+          %a.put{:href => "/a-machine/#{request_row.id}/play", :rel => "tooltip", "data-placement" => "top", :title => "Send again"}
             %i.icon-play
         - else
-          %a.put{:href => "/a-machine/pause/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Pause sending"}<
+          %a.put{:href => "/a-machine/#{request_row.id}/pause", :rel => "tooltip", "data-placement" => "top", :title => "Pause sending"}
             %i.icon-pause
-      - if display_resend_link
-        %a.put{:href => "/a-machine/resend/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}<
+      - if actions.include? :resend
+        %a.put{:href => "/a-machine/#{request_row.id}/resend", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}
           %i.icon-repeat
-      %a.delete{:href => "/a-machine/response/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}<
-        %i.icon-trash
+      - if actions.include? :delete
+        %a.delete{:href => "/a-machine/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}
+          %i.icon-trash
   - if request_row.has_body?
     %pre.response-body.highlight
       = h request_row.body
