@@ -4,6 +4,7 @@ $('.show-body').click(function(event) {
 
 $('.response-body').hide();
 $('[rel=tooltip]').tooltip();
+$('[rel=popover]').popover();
 
 $('.status_button').bind('activate', function(event, value) {
   $(this).closest('.http_status').find('.active').removeClass('active')

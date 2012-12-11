@@ -11,6 +11,17 @@
   font-weight: bold;
   padding-left: 3em;
   padding-right: 3em;
+  cursor: pointer;
+}
+
+.navbar-inner .badge {
+  position: relative;
+  top: -10px;
+  left: -2px;
+}
+
+.navbar-inner .brand:hover .badge {
+  background: #B92C2A;
 }
 
 .content {
