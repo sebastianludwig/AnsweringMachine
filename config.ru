@@ -7,6 +7,6 @@ $LOAD_PATH << File.join(File.dirname(__FILE__))
 $LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
 $LOAD_PATH << File.join(File.dirname(__FILE__), 'helper')
 
-require 'mock_server'
+require 'answering_machine'
 
 run MockServer
