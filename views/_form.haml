@@ -1,0 +1,84 @@
+- if @resp.new?
+  %h1 Add response
+- else
+  %h1 Edit response
+
+%form.form-horizontal{:method => "post", :action => "/a-machine"}
+  %input.hidden{:name => "id", :value => @resp.id}
+  .control-group
+    %label.control-label{:for => "path"} Request
+    .controls
+      %select#path{:name => "path"}
+        - @requests.each do |request|
+          %option{:value => "#{request}", :selected => ("selected" if request == @resp.path)}= request
+          
+  .control-group.tabbable.tabs-left
+    %ul.nav.nav-tabs
+      %li{:class => ("active" unless @resp.forwards?)}
+        %a{:href => "#tab_respond", "data-toggle" => "tab"}
+          %i.icon-pencil
+      %li{:class => ("active" if @resp.forwards_to_url?)}
+        %a{:href => "#tab_forward", "data-toggle" => "tab"}
+          %i.icon-forward
+      %li{:class => ("active" if @resp.forwards_to_file?)}
+        %a{:href => "#tab_file", "data-toggle" => "tab"}
+          %i.icon-file
+    .tab-content
+      
+      .tab-pane.active#tab_respond
+        .control-group
+          %label.control-label{:for => "http_status"} Status
+          .controls.http_status
+            %input.hidden#http_status{:name => "http_status", :value => "200"}
+            = partial :status_dropdown, :locals => { :range => (200..206), :css_class => "btn-success", :response_object => @resp}
+            = partial :status_dropdown, :locals => { :range => (300..308), :css_class => "btn-warning", :response_object => @resp}
+            = partial :status_dropdown, :locals => { :range => (400..418), :css_class => "btn-danger", :response_object => @resp}
+            = partial :status_dropdown, :locals => { :range => (500..505), :css_class => "btn-inverse", :response_object => @resp}
+        .control-group
+          %label.control-label{:for => "content_type"} Conent
+          .controls
+            %select#content_type{:name => "conent_type"}
+              - %w(text/html application/json application/javascript).each do |type|
+                %option{:value => "type", :selected => ("selected" if type == @resp.content_type)}= type
+        .control-group
+          %label.control-label{:for => "body"} Response
+          .controls
+            %textarea#body{:name => "body"}
+              =h @resp.body
+            
+      .tab-pane#tab_forward
+        .control-group
+          %label.control-label{:for => "forward"} Forward
+          .controls
+            %input#forward{:type => "text", :name => "forward", :value => @resp.forward, :placeholder => "URL"}
+            
+      .tab-pane#tab_file
+        .control-group
+          %label.control-label{:for => "file"} File
+          .controls
+            %input#file{:type => "text", :name => "file", :value => @resp.file, :placeholder => "full path - try drag and drop"}
+            
+  .control-group
+    %label.control-label{:for => "tag"} Tag
+    .controls
+      %input#tag{:type => "text", :name => "tag", :value => @resp.tag, :placeholder => "easy to identify"}
+  .control-group
+    %label.control-label{:for => "repeat_counter"} Repeat
+    .controls
+      %select#repeat_counter{:name => "repeat_counter"}
+        - [0, -1, (2..10).to_a].flatten.each do |count|
+          %option{:value => count, :selected => ("selected" if count == @resp.repeat_counter)}<
+            = repeat_description(count).capitalize
+  .control-group
+    %label.control-label{:for => "delay"} Delay
+    .controls
+      .input-append
+        %input.input-mini#delay{:name => "delay", :type => "number", :value => @resp.delay, :step => "0.5", :min => "0", :placeholder => "0"}
+        %span.add-on sec
+  .control-group
+    .controls
+      - if @resp.new?
+        %input.btn.btn-primary{:type => "submit", :value => "Add"}
+      - else
+        %input.btn.btn-primary{:type => "submit", :value => "Save"}
+        %a.btn{:href => "/a-machine"} Cancel

@@ -1,0 +1,8 @@
+.btn-group
+  %button.btn.btn-small.status_button{:type => "button", :class => css_class + " " + (range.include?(response_object.http_status) ? "active" : "")}
+    = range.include?(response_object.http_status) ? response_object.http_status : range.first
+  %button.btn.btn-small.dropdown_button{:type => "button", :class => css_class, "data-toggle" => "dropdown"}
+    %span.caret
+  %ul.dropdown-menu{:role => "menu"}
+    - range.each do |status|
+      = partial :status_code, :locals => { :code => status, :name => http_status_name(status), :selected => (status == response_object.http_status) }

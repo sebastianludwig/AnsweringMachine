@@ -18,10 +18,20 @@ $('.status_button').click(function(event) {
 })
 
 $('.http_status .dropdown-menu li a').click(function(event) {
+  // activate button
   $(this)
     .closest('.btn-group')
     .find('.status_button')
     .trigger('activate', $(this).text().trim())
+  
+  // select 
+  var parent = $(this).closest('.http_status')
+  
+  parent && parent
+    .find('.selected')
+    .removeClass('selected')
+
+  $(this).toggleClass('selected')
 })
 
 $('.http_status .dropdown-menu li > a').hover(

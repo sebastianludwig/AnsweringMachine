@@ -71,28 +71,37 @@ class MockServer < Sinatra::Base
     include Rack::Utils
     alias_method :h, :escape_html
   end
-
+  
   get '/a-machine/?' do
-    @requests = Response.all(:fields => [:path], :unique => true, :order => [:path.asc]).map { |r| r.path }
+    @resp = Response.new
     
-    @sent_responses = Response.sent
-    @scheduled_responses = Response.scheduled
-    
-    haml :index
+    render_index
   end
   
-  post '/a-machine/add' do
+  get '/a-machine/:id/edit' do |id|
+    @resp = Response.get(id)
+    
+    render_index
+  end
+  
+  post '/a-machine' do
+    if params[:id].empty?
+      @resp = Response.new
+    else
+      @resp = Response.get(params[:id])
+    end
     params[:forward].strip!
     params[:file].strip!
-    Response.create(:path => params[:path], 
-                    :body => params[:body], 
-                    :http_status => params[:http_status].to_i,
-                    :repeat_counter => params[:repeat_counter],
-                    :content_type => params[:content_type],
-                    :forward => params[:forward].empty? ? nil : params[:forward],
-                    :file => params[:file].empty? ? nil : params[:file],
-                    :delay => params[:delay].to_f,
-                    :tag => params[:tag])
+    @resp.attributes = {  :path => params[:path], 
+                          :body => params[:body], 
+                          :http_status => params[:http_status].to_i,
+                          :repeat_counter => params[:repeat_counter],
+                          :content_type => params[:content_type],
+                          :forward => params[:forward].empty? ? nil : params[:forward],
+                          :file => params[:file].empty? ? nil : params[:file],
+                          :delay => params[:delay].to_f,
+                          :tag => params[:tag]}
+    @resp.save
     
     redirect '/a-machine'
   end
@@ -168,6 +177,15 @@ class MockServer < Sinatra::Base
   end
   
 private
+
+  def render_index
+    @requests = Response.all(:fields => [:path], :unique => true, :order => [:path.asc]).map { |r| r.path }
+  
+    @sent_responses = Response.sent
+    @scheduled_responses = Response.scheduled
+  
+    haml :index
+  end
 
   def forwarded_response(response)
     uri = URI(response.forward)

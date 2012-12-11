@@ -36,6 +36,9 @@
       - if actions.include? :resend
         %a.put{:href => "/a-machine/#{request_row.id}/resend", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}
           %i.icon-repeat
+      - if actions.include? :edit
+        %a{:href => "/a-machine/#{request_row.id}/edit", :rel => "tooltip", "data-placement" => "top", :title => "Edit"}
+          %i.icon-pencil
       - if actions.include? :delete
         %a.delete{:href => "/a-machine/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}
           %i.icon-trash

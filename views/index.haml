@@ -1,104 +1,4 @@
-%h1 Add response
-
-%form.form-horizontal{:method => "post", :action => "/a-machine/add"}
-  .control-group
-    %label.control-label{:for => "path"} Request
-    .controls
-      %select#path{:name => "path"}
-        - @requests.each do |request|
-          %option{:value => "#{request}"}= request
-          
-  .control-group.tabbable.tabs-left
-    %ul.nav.nav-tabs
-      %li.active
-        %a{:href => "#tab_respond", "data-toggle" => "tab"}
-          %i.icon-pencil
-      %li
-        %a{:href => "#tab_forward", "data-toggle" => "tab"}
-          %i.icon-forward
-      %li
-        %a{:href => "#tab_file", "data-toggle" => "tab"}
-          %i.icon-file
-    .tab-content
-    
-      .tab-pane.active#tab_respond
-        .control-group
-          %label.control-label{:for => "http_status"} Status
-          .controls.http_status
-            %input.hidden#http_status{:name => "http_status", :value => "200"}
-            .btn-group
-              %button.btn.btn-success.btn-small.status_button.active{:type => "button"} 200
-              %button.btn.btn-success.btn-small.dropdown_button{:type => "button", "data-toggle" => "dropdown"}
-                %span.caret
-              %ul.dropdown-menu{:role => "menu"}
-                - 200.upto(206) do |status|
-                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
-            .btn-group
-              %span
-              %button.btn.btn-warning.btn-small.status_button{:type => "button"} 300
-              %button.btn.btn-warning.btn-small.dropdown_button{:type => "button", "data-toggle" => "dropdown"}
-                %span.caret
-              %ul.dropdown-menu{:role => "menu"}
-                - 300.upto(308) do |status|
-                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
-            .btn-group
-              %span
-              %button.btn.btn-danger.btn-small.status_button{:type => "button"} 400
-              %button.btn.btn-danger.btn-small.dropdown_button{:type => "button", "data-toggle" => "dropdown"}
-                %span.caret
-              %ul.dropdown-menu{:role => "menu"}
-                - 400.upto(418) do |status|
-                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
-            .btn-group
-              %span
-              %button.btn.btn-inverse.btn-small.status_button{:type => "button"} 500
-              %button.btn.btn-inverse.btn-small.dropdown_button.dropdown-toggle{:type => "button", "data-toggle" => "dropdown"}
-                %span.caret
-              %ul.dropdown-menu{:role => "menu"}
-                - 500.upto(505) do |status|
-                  = partial :status_code, :locals => { :code => status, :name => http_status_name(status) }
-        .control-group
-          %label.control-label{:for => "content_type"} Conent
-          .controls
-            %select#content_type{:name => "conent_type"}
-              - %w(text/html application/json application/javascript).each do |type|
-                %option{:value => "type"}= type
-        .control-group
-          %label.control-label{:for => "body"} Response
-          .controls
-            %textarea#body{:name => "body"}
-            
-      .tab-pane#tab_forward
-        .control-group
-          %label.control-label{:for => "forward"} Forward
-          .controls
-            %input#forward{:type => "text", :name => "forward", :placeholder => "URL"}
-            
-      .tab-pane#tab_file
-        .control-group
-          %label.control-label{:for => "file"} File
-          .controls
-            %input#file{:type => "text", :name => "file", :placeholder => "full path - try drag and drop"}
-            
-  .control-group
-    %label.control-label{:for => "tag"} Tag
-    .controls
-      %input#tag{:type => "text", :name => "tag", :placeholder => "easy to identify"}
-  .control-group
-    %label.control-label{:for => "repeat_counter"} Repeat
-    .controls
-      %select#repeat_counter{:name => "repeat_counter"}
-        - [0, -1, (2..10).to_a].flatten.each do |count|
-          %option{:value => count}= repeat_description(count).capitalize
-  .control-group
-    %label.control-label{:for => "delay"} Delay
-    .controls
-      .input-append
-        %input.input-mini#delay{:name => "delay", :type => "number", :step => "0.5", :min => "0", :placeholder => "0"}
-        %span.add-on sec
-  .control-group
-    .controls
-      %input.btn.btn-primary{:type => "submit", :value => "Add"}
+= partial :form
 
 %h1 Responses
 
@@ -114,7 +14,7 @@
 .tab-content
   .tab-pane.active#tab_scheduled
     %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @scheduled_responses, :locals => { :actions => [:pause, :delete] }
+      = partial :request_row, :collection => @scheduled_responses, :locals => { :actions => [:pause, :edit, :delete] }
   .tab-pane#tab_sent
     %ul.unstyled.list-striped.list-hover
       = partial :request_row, :collection => @sent_responses, :locals => { :actions => [:resend, :delete] }
