@@ -27,7 +27,7 @@ class Response
   end
   
   def self.scheduled(options = {})
-    all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:requested_at.asc]}))
+    all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:paused.asc, :requested_at.asc]}))
   end
   
   def repeats?
