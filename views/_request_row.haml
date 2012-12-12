@@ -3,10 +3,10 @@
     - if request_row.forwards?
       %span
     - else
-      %a.label{:class => css_class_for_http_status(request_row.http_status), :rel => "tooltip", "data-placement" => "right", :title => http_status_name(request_row.http_status)}
+      %a.label{:class => (css_class_for_http_status(request_row.http_status) unless request_row.paused), :rel => "tooltip", "data-placement" => "right", :title => http_status_name(request_row.http_status)}
         = request_row.http_status
     %span.show-body.response-title{:class => ("pointer" if request_row.has_body?) }
-      %span.path
+      %span.path{:class => ("paused" if request_row.paused)}
         = request_row.path
         - if request_row.forwards_to_url?
           %i.icon-forward
@@ -16,12 +16,12 @@
           = request_row.file
       %span.label= request_row.tag
       - if request_row.repeats?
-        %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "Repeat #{repeat_description(request_row.repeat_counter)}"}
+        %a.label{:class => ("label-info" unless request_row.paused), :rel => "tooltip", "data-placement" => "top", :title => "Repeat #{repeat_description(request_row.repeat_counter)}"}
           %i.icon-refresh.icon-white
           - if request_row.repeat_counter > 1
             = "#{request_row.repeat_counter}"
       -if request_row.delay > 0
-        %a.label.label-info{:rel => "tooltip", "data-placement" => "top", :title => "#{request_row.delay} seconds delayed"}
+        %a.label{:class => ("label-info" unless request_row.paused), :rel => "tooltip", "data-placement" => "top", :title => "#{request_row.delay} seconds delayed"}
           %i.icon-time.icon-white
           = "#{request_row.delay}s"
     %span<

@@ -189,6 +189,10 @@ td form {
   margin-right: 3em;
 }
 
+.response-title .paused {
+  color: #aaa;
+}
+
 .response-title .label {
   margin-left: 0.5em;
 }
