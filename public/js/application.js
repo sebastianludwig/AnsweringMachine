@@ -4,7 +4,17 @@ $('.show-body').click(function(event) {
 
 $('.response-body').hide();
 $('[rel=tooltip]').tooltip();
-$('[rel=popover]').popover();
+$('a.brand').popover({
+  "html": true, 
+  "title": function() {
+    return '<span>Powered by <a href="http://www.lurado.com">Lurado</a></span>' +
+          '<span class="version">v 0.8</span>'
+  },
+  "content": function() {
+    return '<p>Check out the project page and documentation on <a href="https://github.com/sebastianludwig/AnsweringMachine" title="GitHub">GitHub</a>.</p>' +
+          '<p><small>Developed by Sebastian Ludwig</small>.</p>'
+  }
+});
 
 $('.status_button').bind('activate', function(event, value) {
   $(this).closest('.http_status').find('.active').removeClass('active')

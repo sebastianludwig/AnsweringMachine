@@ -7,9 +7,11 @@
   %body
     .navbar.navbar-inverse.navbar-static-top
       .navbar-inner
-        %a.brand{:rel => "popover", "data-placement" => "bottom", :title => "Lurado", "data-content" => "Lurado-Link"}
+        %a.brand{:rel => "popover", "data-placement" => "bottom"}
           AnsweringMachine
-          %span.badge.badge-important= @scheduled_responses.count
+          %span.badge.badge-important<
+            - if @scheduled_responses.count > 0
+              = @scheduled_responses.count
 
     .content
       = yield
