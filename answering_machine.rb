@@ -210,7 +210,7 @@ private
 
   def replace_variables(body)
     body.gsub(/\$\{timestamp\}/, Time.now.to_i.to_s).
-        gsub(/\$\{eval:(.+)\}/) { Kernel.eval($1).to_s }
+        gsub(/\$\{ruby:(.+)\}/) { Kernel.eval($1).to_s }
   end
 
   def forward_headers(request)
