@@ -10,8 +10,7 @@
         %a.brand{:rel => "popover", "data-placement" => "bottom"}
           AnsweringMachine
           %span.badge.badge-important<
-            - if @scheduled_responses.count > 0
-              = @scheduled_responses.count
+            = count = @scheduled_responses.count(:paused => false); count if count > 0
 
     .content
       = yield
