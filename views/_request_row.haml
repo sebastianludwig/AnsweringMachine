@@ -43,5 +43,4 @@
         %a.delete{:href => "/a-machine/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}
           %i.icon-trash
   - if request_row.has_body?
-    %pre.response-body.highlight
-      = h request_row.body
+    %pre.response-body.highlight= h request_row.body

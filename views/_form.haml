@@ -43,8 +43,7 @@
         .control-group
           %label.control-label{:for => "body"} Response
           .controls
-            %textarea#body{:name => "body"}
-              =h @resp.body
+            %textarea#body{:name => "body"}=h @resp.body
             
       .tab-pane#tab_forward
         .control-group
