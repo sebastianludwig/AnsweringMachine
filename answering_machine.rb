@@ -85,7 +85,7 @@ class MockServer < Sinatra::Base
   end
   
   post '/a-machine' do
-    if params[:id].empty?
+    if params[:id].empty? || params[:submit] == "New"
       @resp = Response.new
     else
       @resp = Response.get(params[:id])

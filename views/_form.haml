@@ -77,7 +77,8 @@
   .control-group
     .controls
       - if @resp.new?
-        %input.btn.btn-primary{:type => "submit", :value => "Add"}
+        %input.btn.btn-primary{:type => "submit", :name => "submit", :value => "Add"}
       - else
-        %input.btn.btn-primary{:type => "submit", :value => "Save"}
+        %input.btn.btn-primary{:type => "submit", :name => "submit", :value => "Save"}
+        %input.btn.btn-info{:type => "submit", :name => "submit", :value => "New"}
         %a.btn{:href => "/a-machine"} Cancel
