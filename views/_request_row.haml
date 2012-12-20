@@ -24,23 +24,23 @@
         %a.label{:class => ("label-info" unless request_row.paused), :rel => "tooltip", "data-placement" => "top", :title => "#{request_row.delay} seconds delayed"}
           %i.icon-time.icon-white
           = "#{request_row.delay}s"
-    %span<
+    %span
       = request_row.requested_at.strftime("%H:%M:%S") unless request_row.requested_at.nil?
       - if actions.include? :pause
         - if request_row.paused
-          %a.put{:href => "/a-machine/#{request_row.id}/play", :rel => "tooltip", "data-placement" => "top", :title => "Send again"}
+          %a.put{:href => "/a-machine/#{request_row.id}/play", :rel => "tooltip", "data-placement" => "top", :title => "Send again"}<
             %i.icon-play
         - else
-          %a.put{:href => "/a-machine/#{request_row.id}/pause", :rel => "tooltip", "data-placement" => "top", :title => "Pause sending"}
+          %a.put{:href => "/a-machine/#{request_row.id}/pause", :rel => "tooltip", "data-placement" => "top", :title => "Pause sending"}<
             %i.icon-pause
       - if actions.include? :resend
-        %a.put{:href => "/a-machine/#{request_row.id}/resend", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}
+        %a.put{:href => "/a-machine/#{request_row.id}/resend", :rel => "tooltip", "data-placement" => "top", :title => "Resend"}<
           %i.icon-repeat
       - if actions.include? :edit
-        %a{:href => "/a-machine/#{request_row.id}/edit", :rel => "tooltip", "data-placement" => "top", :title => "Edit"}
+        %a{:href => "/a-machine/#{request_row.id}/edit", :rel => "tooltip", "data-placement" => "top", :title => "Edit"}<
           %i.icon-pencil
       - if actions.include? :delete
-        %a.delete{:href => "/a-machine/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}
+        %a.delete{:href => "/a-machine/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}<
           %i.icon-trash
   - if request_row.has_body?
     %pre.response-body.highlight= h request_row.body
