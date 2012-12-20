@@ -1,4 +1,12 @@
 module ViewHelper
+  def escape_javascript(html_content)
+    return '' unless html_content
+    javascript_mapping = { '\\' => '\\\\', '</' => '<\/', "\r\n" => '\n', "\n" => '\n' }
+    javascript_mapping.merge("\r" => '\n', '"' => '\\"', "'" => "\\'")
+    escaped_string = html_content.gsub(/(\\|<\/|\r\n|[\n\r"'])/) { javascript_mapping[$1] }
+    "\"#{escaped_string}\""
+  end
+  
   def css_class_for_http_status(status)
     return 'label-success' if (200...300) === status
     return 'label-warning' if (300...400) === status

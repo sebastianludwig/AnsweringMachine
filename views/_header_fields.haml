@@ -1,0 +1,5 @@
+.http-header
+  %input{:type => "text", :name => "header_names[]", :placeholder => "name", :value => (header[0] if header)}
+  %input{:type => "text", :name => "header_values[]", :placeholder => "value", :value => (header[1] if header)}
+  %a{:href => "javascript:void(0)", :onclick => "removeHttpHeader(this)"}<
+    %i.icon-remove

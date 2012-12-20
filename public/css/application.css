@@ -208,10 +208,23 @@ td form {
 }
 
 .response-body {
+  
+}
+
+.response-body table {
+  width: auto;
+  min-width: 18em;
+}
+
+.response-body pre {
   width: auto !important;
   max-height: 20em !important;
-  overflow-y: scroll !important;
   font-size: 10pt !important;
+  overflow-y: scroll !important;
+}
+
+.response-body pre ol {
+  margin-left: 0px;
 }
 
 .prettyprint li,

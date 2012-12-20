@@ -54,7 +54,7 @@ $('.http_status .dropdown-menu li > a').hover(
     $(this).css('background', 'white')
   }
 )
-  
+
 $('.delete,.put').click(function() {
   var method = 'POST';
   if ($(this).hasClass('put')) {
@@ -76,3 +76,7 @@ $('.delete,.put').click(function() {
   
   return false;
 });
+
+function removeHttpHeader(link) {
+  $(link).closest('.http-header').remove()
+}

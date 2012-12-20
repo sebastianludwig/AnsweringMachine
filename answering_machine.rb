@@ -19,6 +19,7 @@ class Response
   property :tag, String, :length => 64
   property :delay, Float, :default => 0
   property :content_type, String
+  property :raw_headers, String
   property :body, Text, :length => 500000
   property :requested_at, DateTime
   
@@ -48,6 +49,17 @@ class Response
   
   def has_body?
     body && !body.empty?
+  end
+
+  def headers
+    return [] unless raw_headers
+    # name1=value1 \n name2=value2 => [[name1, value1], [name2, value2]]
+    raw_headers.lines.map { |line| line.partition('=').map(&:chomp).values_at(0, 2) }
+  end
+  
+  def headers=(array)
+    # [[name1, value1], [name2, value2]] => name1=value1 \n name2=value2
+    self.raw_headers = array.collect { |header| header.join('=') }.join("\n")
   end
 end
 
@@ -90,6 +102,7 @@ class MockServer < Sinatra::Base
     else
       @resp = Response.get(params[:id])
     end
+    
     params[:forward].strip!
     params[:file].strip!
     @resp.attributes = {  :path => params[:path], 
@@ -97,6 +110,7 @@ class MockServer < Sinatra::Base
                           :http_status => params[:http_status].to_i,
                           :repeat_counter => params[:repeat_counter],
                           :content_type => params[:content_type],
+                          :headers => [params[:header_names], params[:header_values]].transpose,
                           :forward => params[:forward].empty? ? nil : params[:forward],
                           :file => params[:file].empty? ? nil : params[:file],
                           :delay => params[:delay].to_f,
@@ -165,6 +179,7 @@ class MockServer < Sinatra::Base
       status, headers, body = file_response(res)
     else
       headers = { "Content-Type" => res.content_type }
+      res.headers.each { |header| headers[header[0]] = header[1] }
       status = res.http_status
       body = res.body
     end

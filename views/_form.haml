@@ -56,7 +56,12 @@
           %label.control-label{:for => "file"} File
           .controls
             %input#file{:type => "text", :name => "file", :value => @resp.file, :placeholder => "full path - try drag and drop"}
-            
+  .control-group
+    %label.control-label{:for => "headers"} Headers
+    .controls
+      - @resp.headers.each do |header|
+        = partial :header_fields, :locals => {:header => header}
+      %a{:href => "javascript:void(0)", :onclick => "jQuery(this).before(#{escape_javascript partial :header_fields, :locals => {:header => nil}})"} Add header
   .control-group
     %label.control-label{:for => "tag"} Tag
     .controls

@@ -42,5 +42,17 @@
       - if actions.include? :delete
         %a.delete{:href => "/a-machine/#{request_row.id}", :rel => "tooltip", "data-placement" => "top", :title => "Delete"}<
           %i.icon-trash
-  - if request_row.has_body?
-    %pre.response-body.highlight= h request_row.body
+  - if request_row.has_body? || !request_row.headers.empty?
+    .response-body
+      - unless request_row.headers.empty?
+        %table.table.table-striped.table-condensed
+          %thead
+            %tr
+              %th Header
+              %th Value
+          %tbody
+            - request_row.headers.each do |header|
+              %tr
+                %td= header[0]
+                %td= header[1]
+      %pre.highlight= h request_row.body
