@@ -28,8 +28,8 @@
       .tab-pane.active#tab_respond
         .control-group
           %label.control-label{:for => "http_status"} Status
-          .controls.http_status
-            %input.hidden#http_status{:name => "http_status", :value => @resp.http_status}
+          .controls.http-status
+            %input.hidden#http-status{:name => "http_status", :value => @resp.http_status}
             = partial :status_dropdown, :locals => { :range => (200..206), :css_class => "btn-success", :response_object => @resp}
             = partial :status_dropdown, :locals => { :range => (300..308), :css_class => "btn-warning", :response_object => @resp}
             = partial :status_dropdown, :locals => { :range => (400..418), :css_class => "btn-danger", :response_object => @resp}

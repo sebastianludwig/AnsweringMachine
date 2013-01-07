@@ -17,17 +17,17 @@ $('a.brand').popover({
 });
 
 $('.status_button').bind('activate', function(event, value) {
-  $(this).closest('.http_status').find('.active').removeClass('active')
+  $(this).closest('.http-status').find('.active').removeClass('active')
   $(this).toggleClass('active')
   $(this).text(value)
-  $('#http_status').attr('value', value)
+  $('#http-status').attr('value', value)
 })
 
 $('.status_button').click(function(event) {
   $(this).trigger('activate', $(this).text().trim())
 })
 
-$('.http_status .dropdown-menu li a').click(function(event) {
+$('.http-status .dropdown-menu li a').click(function(event) {
   // activate button
   $(this)
     .closest('.btn-group')
@@ -35,7 +35,7 @@ $('.http_status .dropdown-menu li a').click(function(event) {
     .trigger('activate', $(this).text().trim())
   
   // select 
-  var parent = $(this).closest('.http_status')
+  var parent = $(this).closest('.http-status')
   
   parent && parent
     .find('.selected')
@@ -44,7 +44,7 @@ $('.http_status .dropdown-menu li a').click(function(event) {
   $(this).toggleClass('selected')
 })
 
-$('.http_status .dropdown-menu li > a').hover(
+$('.http-status .dropdown-menu li > a').hover(
   function() {
     $(this).css('background', function(index, value) {
       return $(this).closest('.btn-group').find('.dropdown_button').css('background')
