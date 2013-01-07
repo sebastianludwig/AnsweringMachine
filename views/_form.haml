@@ -56,7 +56,7 @@
           %label.control-label{:for => "file"} File
           .controls
             %input#file{:type => "text", :name => "file", :value => @resp.file, :placeholder => "full path - try drag and drop"}
-  .control-group
+  .control-group.http-headers
     %label.control-label{:for => "headers"} Headers
     .controls
       - @resp.headers.each do |header|

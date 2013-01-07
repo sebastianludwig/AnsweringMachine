@@ -148,6 +148,15 @@
   width: 0px;
 }
 
+.http-headers .controls a {
+  display: inline-block;
+  padding-top: 5px;
+}
+
+.http-headers .http-header input {
+  width: 24%;
+}
+
 input[type='number'] {
   text-align: right;
 }
