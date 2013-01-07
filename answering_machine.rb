@@ -58,8 +58,12 @@ class Response
   end
   
   def headers=(array)
-    # [[name1, value1], [name2, value2]] => name1=value1 \n name2=value2
-    self.raw_headers = array.collect { |header| header.join('=') }.join("\n")
+    if array.nil?
+      self.raw_headers = nil
+    else
+      # [[name1, value1], [name2, value2]] => name1=value1 \n name2=value2
+      self.raw_headers = array.collect { |header| header.join('=') }.join("\n")
+    end
   end
 end
 
@@ -110,7 +114,7 @@ class MockServer < Sinatra::Base
                           :http_status => params[:http_status].to_i,
                           :repeat_counter => params[:repeat_counter],
                           :content_type => params[:content_type],
-                          :headers => [params[:header_names], params[:header_values]].transpose,
+                          :headers => params[:header_names].nil? ? nil : [params[:header_names], params[:header_values]].transpose,
                           :forward => params[:forward].empty? ? nil : params[:forward],
                           :file => params[:file].empty? ? nil : params[:file],
                           :delay => params[:delay].to_f,
