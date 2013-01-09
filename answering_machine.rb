@@ -192,7 +192,7 @@ class MockServer < Sinatra::Base
     
     res.save    # save before we return
     
-    [status, (headers if headers), body(replace_variables(body))]
+    [status, (headers if headers), replace_variables(body)]
   end
   
 private
