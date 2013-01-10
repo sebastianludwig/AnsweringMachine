@@ -130,11 +130,11 @@
   min-width: 5em;
 }
 
-.http-status .status_button {
+.http-status .status-button {
   padding-left: 7px !important;
   padding-right: 7px !important;  
 }
-.http-status .dropdown_button {
+.http-status .dropdown-button {
   padding-left: 4px !important;
   padding-right: 4px !important;
 }

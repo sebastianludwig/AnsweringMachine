@@ -23,14 +23,14 @@ $('.http-method button').click(function() {
   checkbox.prop('checked', !checkbox.is(":checked"))
 });
 
-$('.status_button').bind('activate', function(event, value) {
+$('.status-button').bind('activate', function(event, value) {
   $(this).closest('.http-status').find('.active').removeClass('active')
   $(this).toggleClass('active')
   $(this).text(value)
   $('#http-status').attr('value', value)
 })
 
-$('.status_button').click(function(event) {
+$('.status-button').click(function(event) {
   $(this).trigger('activate', $(this).text().trim())
 })
 
@@ -38,7 +38,7 @@ $('.http-status .dropdown-menu li a').click(function(event) {
   // activate button
   $(this)
     .closest('.btn-group')
-    .find('.status_button')
+    .find('.status-button')
     .trigger('activate', $(this).text().trim())
   
   // select 
@@ -54,7 +54,7 @@ $('.http-status .dropdown-menu li a').click(function(event) {
 $('.http-status .dropdown-menu li > a').hover(
   function() {
     $(this).css('background', function(index, value) {
-      return $(this).closest('.btn-group').find('.dropdown_button').css('background')
+      return $(this).closest('.btn-group').find('.dropdown-button').css('background')
     })
   },
   function() {
