@@ -102,6 +102,10 @@
   margin-left: 0px;
 }
 
+.http-method .active {
+  font-weight: bold;
+}
+
 .http-status .btn-group {
   float:left;
 }
@@ -179,6 +183,14 @@ td form {
   margin-bottom: 3pt;
 }
 
+.item-header .http-method-inactive {
+  background-color: #ddd;
+}
+
+.item-header .http-method-active {
+  background-color: #999;
+}
+
 .item-header > a:hover {
   cursor: default;
 }
@@ -188,8 +200,8 @@ td form {
 }
 
 .item-header > span:first-child {
-  min-width: 2em;
-  text-align: center;
+  min-width: 8em;
+  text-align: right;
 }
 
 .item-header > span:last-child {

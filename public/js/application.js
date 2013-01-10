@@ -16,6 +16,13 @@ $('a.brand').popover({
   }
 });
 
+$('.http-method button').click(function() {
+  var name = $(this).attr('name')
+  var value = $(this).hasClass('active') ? "1" : "0"
+  var checkbox = $('input[type=checkbox][name=' + name + ']')
+  checkbox.prop('checked', !checkbox.is(":checked"))
+});
+
 $('.status_button').bind('activate', function(event, value) {
   $(this).closest('.http-status').find('.active').removeClass('active')
   $(this).toggleClass('active')

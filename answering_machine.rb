@@ -11,9 +11,13 @@ class Response
   include DataMapper::Resource
   property :id, Serial
   property :path, String, :index => :path, :length => 256
+  property :http_get, Boolean, :default => true
+  property :http_post, Boolean, :default => true
+  property :http_put, Boolean, :default => true
+  property :http_delete, Boolean, :default => true
   property :http_status, Integer, :default => 200
   property :repeat_counter, Integer, :default => 0
-  property :paused, Boolean, :default => 0
+  property :paused, Boolean, :default => false
   property :forward, String, :length => 256
   property :file, String, :length => 256
   property :tag, String, :length => 64
@@ -109,7 +113,11 @@ class MockServer < Sinatra::Base
     
     params[:forward].strip!
     params[:file].strip!
-    @resp.attributes = {  :path => params[:path], 
+    @resp.attributes = {  :path => params[:path],
+                          :http_get => params[:http_get] != nil,
+                          :http_post => params[:http_post] != nil,
+                          :http_put => params[:http_put] != nil,
+                          :http_delete => params[:http_delete] != nil,
                           :body => params[:body], 
                           :http_status => params[:http_status].to_i,
                           :repeat_counter => params[:repeat_counter],
@@ -162,10 +170,37 @@ class MockServer < Sinatra::Base
   end
   
   get '/*' do
+    response_for_current_request
+  end
+  
+  post '/*' do
+    response_for_current_request
+  end
+  
+  put '/*' do
+    response_for_current_request
+  end
+  
+  delete '/*' do
+    response_for_current_request
+  end  
+  
+private
+
+  def render_index
+    @requests = Response.all(:fields => [:path], :unique => true, :order => [:path.asc]).map { |r| r.path }
+  
+    @sent_responses = Response.sent
+    @scheduled_responses = Response.scheduled
+  
+    haml :index
+  end
+  
+  def response_for_current_request
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
     
-    res = Response.scheduled(:path => path, :paused => false).first
+    res = Response.scheduled(:path => path, :paused => false, "http_" + request.request_method.downcase => true).first
     if !res
       res = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
@@ -193,17 +228,6 @@ class MockServer < Sinatra::Base
     res.save    # save before we return
     
     [status, (headers if headers), replace_variables(body)]
-  end
-  
-private
-
-  def render_index
-    @requests = Response.all(:fields => [:path], :unique => true, :order => [:path.asc]).map { |r| r.path }
-  
-    @sent_responses = Response.sent
-    @scheduled_responses = Response.scheduled
-  
-    haml :index
   end
 
   def forwarded_response(response)

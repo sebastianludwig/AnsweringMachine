@@ -1,10 +1,15 @@
 %li
   .item-header
-    - if request_row.forwards?
-      %span
-    - else
-      %a.label{:class => (css_class_for_http_status(request_row.http_status) unless request_row.paused), :rel => "tooltip", "data-placement" => "right", :title => http_status_name(request_row.http_status)}
-        = request_row.http_status
+    %span
+      - if request_row.forwards?
+        %span{:style => "min-width: 2em;"}
+      - else
+        %a.label{:class => (css_class_for_http_status(request_row.http_status) unless request_row.paused), :rel => "tooltip", "data-placement" => "right", :title => http_status_name(request_row.http_status)}
+          = request_row.http_status
+      %span.label{:class => (request_row.http_get ? "http-method-active" : "http-method-inactive")} G
+      %span.label{:class => (request_row.http_post ? "http-method-active" : "http-method-inactive")} P
+      %span.label{:class => (request_row.http_put ? "http-method-active" : "http-method-inactive")} P
+      %span.label{:class => (request_row.http_delete ? "http-method-active" : "http-method-inactive")} D
     %span.show-body.response-title{:class => ("pointer" if request_row.has_body?) }
       %span.path{:class => ("paused" if request_row.paused)}
         = request_row.path

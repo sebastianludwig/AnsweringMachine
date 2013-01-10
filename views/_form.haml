@@ -11,6 +11,19 @@
       %select#path{:name => "path"}
         - @requests.each do |request|
           %option{:value => "#{request}", :selected => ("selected" if request == @resp.path)}= request
+  
+  .control-group.http-method
+    %label.control-label{:for => "http_method"} Method
+    .controls
+      %input.hidden{:type => "checkbox", :name => "http_get", :checked => ("checked" if @resp.http_get)}
+      %input.hidden{:type => "checkbox", :name => "http_post", :checked => ("checked" if @resp.http_post)}
+      %input.hidden{:type => "checkbox", :name => "http_put", :checked => ("checked" if @resp.http_put)}
+      %input.hidden{:type => "checkbox", :name => "http_delete", :checked => ("checked" if @resp.http_delete)}
+      .btn-group{"data-toggle" => "buttons-checkbox"}
+        %button.btn.btn-small{:type => "button", :name => "http_get", :class => ("active" if @resp.http_get)} GET
+        %button.btn.btn-small{:type => "button", :name => "http_post", :class => ("active" if @resp.http_post)} POST
+        %button.btn.btn-small{:type => "button", :name => "http_put", :class => ("active" if @resp.http_put)} PUT
+        %button.btn.btn-small{:type => "button", :name => "http_delete", :class => ("active" if @resp.http_delete)} DELETE
           
   .control-group.tabbable.tabs-left
     %ul.nav.nav-tabs
