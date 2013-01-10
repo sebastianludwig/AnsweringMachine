@@ -62,6 +62,10 @@ $('.http-status .dropdown-menu li > a').hover(
   }
 )
 
+$('.nav-tabs li a').click(function() {
+  $('.nav-tabs input').attr('value', $(this).data('value'))
+});
+
 $('.delete,.put').click(function() {
   var method = 'POST';
   if ($(this).hasClass('put')) {

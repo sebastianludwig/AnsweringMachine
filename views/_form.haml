@@ -27,14 +27,15 @@
           
   .control-group.tabbable.tabs-left
     %ul.nav.nav-tabs
+      %input{:type => "hidden", :name => "response_mode", :value => "manual"}
       %li{:class => ("active" unless @resp.forwards?)}
-        %a{:href => "#tab_respond", "data-toggle" => "tab"}
+        %a{:href => "#tab_respond", "data-toggle" => "tab", "data-value" => "manual"}
           %i.icon-pencil
       %li{:class => ("active" if @resp.forwards_to_url?)}
-        %a{:href => "#tab_forward", "data-toggle" => "tab"}
+        %a{:href => "#tab_forward", "data-toggle" => "tab", "data-value" => "forward_to_url"}
           %i.icon-forward
       %li{:class => ("active" if @resp.forwards_to_file?)}
-        %a{:href => "#tab_file", "data-toggle" => "tab"}
+        %a{:href => "#tab_file", "data-toggle" => "tab", "data-value" => "forward_to_file"}
           %i.icon-file
     .tab-content
       

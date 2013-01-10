@@ -18,6 +18,7 @@ class Response
   property :http_status, Integer, :default => 200
   property :repeat_counter, Integer, :default => 0
   property :paused, Boolean, :default => false
+  property :mode, String
   property :forward, String, :length => 256
   property :file, String, :length => 256
   property :tag, String, :length => 64
@@ -44,11 +45,11 @@ class Response
   end
   
   def forwards_to_url?
-    forward && !forward.empty?
+    mode == "forward_to_url"
   end
   
   def forwards_to_file?
-    file && !file.empty?
+    mode == "forward_to_file"
   end
   
   def has_body?
@@ -122,9 +123,10 @@ class MockServer < Sinatra::Base
                           :http_status => params[:http_status].to_i,
                           :repeat_counter => params[:repeat_counter],
                           :content_type => params[:content_type],
-                          :headers => params[:header_names].nil? ? nil : [params[:header_names], params[:header_values]].transpose,
+                          :mode => params[:response_mode],
                           :forward => params[:forward].empty? ? nil : params[:forward],
                           :file => params[:file].empty? ? nil : params[:file],
+                          :headers => params[:header_names].nil? ? nil : [params[:header_names], params[:header_values]].transpose,
                           :delay => params[:delay].to_f,
                           :tag => params[:tag]}
     @resp.save
