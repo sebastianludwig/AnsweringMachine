@@ -16,6 +16,7 @@ class Response
   property :http_put, Boolean, :default => true
   property :http_delete, Boolean, :default => true
   property :http_status, Integer, :default => 200
+  property :received_data, String, :length => 256
   property :repeat_counter, Integer, :default => 0
   property :paused, Boolean, :default => false
   property :mode, String
@@ -54,6 +55,10 @@ class Response
   
   def has_body?
     body && !body.empty?
+  end
+  
+  def has_received_data?
+    received_data && !received_data.empty?
   end
 
   def headers
@@ -226,6 +231,8 @@ private
     end
     
     res.body = body if res.forwards?
+    
+    res.received_data = request.env["rack.input"].read
     
     res.save    # save before we return
     
