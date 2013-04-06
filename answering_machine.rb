@@ -37,6 +37,10 @@ class Response
     all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:paused.asc, :requested_at.asc]}))
   end
   
+  def self.exists_for_path?(path)
+    count(:conditions => {:path => path}) > 0
+  end
+  
   def repeats?
     repeat_counter > 1 || repeat_counter == -1
   end
@@ -209,7 +213,7 @@ private
     
     res = Response.scheduled(:path => path, :paused => false, "http_" + request.request_method.downcase => true).first
     if !res
-      res = Response.create(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
+      res = Response.new(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
     end
     res.attributes = { :requested_at => Time.now }
     res.attributes = { :repeat_counter => res.repeat_counter-1 } if res.repeat_counter > 0
@@ -234,7 +238,7 @@ private
     
     res.received_data = request.env["rack.input"].read
     
-    res.save    # save before we return
+    res.save if !res.new? or res.has_received_data? or !Response.exists_for_path? path
     
     [status, (headers if headers), replace_variables(body)]
   end
