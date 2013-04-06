@@ -210,6 +210,7 @@ private
   def response_for_current_request
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
+    path += '?' + Rack::Utils.build_query(parameters) unless parameters.empty?
     
     res = Response.scheduled(:path => path, :paused => false, "http_" + request.request_method.downcase => true).first
     if !res
