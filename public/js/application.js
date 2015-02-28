@@ -99,9 +99,10 @@ $('[data-toggle="tabajax"]').click(function(e) {
         targ = $this.attr('data-target');
 
     $.get(loadurl, function(data) {
-        data = $(data)
+        data = $(data);
         data.find('.response-body').hide();
         $(targ).html(data.html());
+        $(targ).syntaxHighlight();
     });
 
     $this.tab('show');
