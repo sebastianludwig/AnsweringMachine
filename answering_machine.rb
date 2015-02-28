@@ -19,7 +19,7 @@ class Response
   property :http_put, Boolean, :default => true
   property :http_delete, Boolean, :default => true
   property :http_status, Integer, :default => 200
-  property :received_data, String, :length => 256
+  property :received_data, String, :length => 4096
   property :repeat_counter, Integer, :default => 0
   property :paused, Boolean, :default => false
   property :mode, String
@@ -229,10 +229,12 @@ private
     path = params[:splat].first
     parameters = params.delete_if { |k, v| ['splat', 'captures'].include? k }
     path += '?' + Rack::Utils.build_query(parameters) unless parameters.empty?
-    
-    res = Response.scheduled(:path => path, :paused => false, "http_" + request.request_method.downcase => true).first
+    received_data = request.env["rack.input"].read
+
+
+    res = Response.scheduled(path: path, paused: false, "http_" + request.request_method.downcase => true, received_data: received_data).first
     if !res
-      res = Response.new(:path => path, :body => '', :http_status => 200, :content_type => 'text/html')
+      res = Response.new(path: path, body: '', http_status: 200, content_type: 'text/html')
     end
     res.attributes = { :requested_at => Time.now }
     res.attributes = { :repeat_counter => res.repeat_counter-1 } if res.repeat_counter > 0
@@ -255,9 +257,14 @@ private
     
     res.body = body if res.forwards?
     
-    res.received_data = request.env["rack.input"].read
+    res.received_data = received_data
     
-    res.save if !res.new? or res.has_received_data? or !Response.exists_for_path? path
+    begin
+      res.save if !res.new? or res.has_received_data? or !Response.exists_for_path? path
+    rescue Exception => e
+      puts res.errors.inspect
+      raise e
+    end
     
     [status, (headers if headers), replace_variables(body)]
   end
