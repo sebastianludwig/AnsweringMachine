@@ -39,6 +39,7 @@ class Response
     Response.normalize_received_data!(response.received_data)
   end
 
+  # http://stackoverflow.com/questions/14217101/what-character-represents-a-new-line-in-a-text-area
   def self.normalize_received_data!(data)
     data.gsub!(/\r\n?/, "\n")
     data.strip!
@@ -157,7 +158,6 @@ class MockServer < Sinatra::Base
       @resp = Response.get(params[:id])
     end
 
-    # http://stackoverflow.com/questions/14217101/what-character-represents-a-new-line-in-a-text-area
     params[:forward].strip!
     params[:file].strip!
 
