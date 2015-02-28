@@ -1,4 +1,4 @@
 .tab-pane#tab_sent
   %ul.unstyled.list-striped.list-hover
-    = partial :request_row, :collection => sent, :locals => { :actions => [:resend, :delete] }
+    = partial :request_row, :collection => sent, :locals => { :actions => [:resend, :edit, :delete] }
     = will_paginate @sent_responses, renderer: BootstrapPagination::Sinatra
