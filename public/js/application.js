@@ -16,6 +16,10 @@ $('a.brand').popover({
   }
 });
 
+$('#match_received_data').click(function() {
+    $('#received_data').toggleClass('hidden', !$(this).is(":checked"));
+});
+
 $('.http-method button').click(function() {
   var name = $(this).attr('name')
   var value = $(this).hasClass('active') ? "1" : "0"

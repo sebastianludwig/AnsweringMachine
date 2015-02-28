@@ -24,6 +24,13 @@
         %button.btn.btn-small{:type => "button", :name => "http_post", :class => ("active" if @resp.http_post)} POST
         %button.btn.btn-small{:type => "button", :name => "http_put", :class => ("active" if @resp.http_put)} PUT
         %button.btn.btn-small{:type => "button", :name => "http_delete", :class => ("active" if @resp.http_delete)} DELETE
+
+  .control-group
+    %label.control-label{:for => "received_data"} Data
+    .controls
+      %label.checkbox
+        %input#match_received_data{type: 'checkbox', name: 'match_received_data', checked: ("checked" if @resp.match_received_data?)} Match
+      %textarea#received_data{name: "received_data", :class => ("hidden" unless @resp.match_received_data?)}=h @resp.received_data
           
   .control-group.tabbable.tabs-left
     %ul.nav.nav-tabs

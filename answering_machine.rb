@@ -6,7 +6,7 @@ require 'view_helper'
 require 'will_paginate'
 require 'will_paginate/data_mapper'
 
-#DataMapper::Logger.new(STDOUT, :debug)
+# DataMapper::Logger.new(STDOUT, :debug)
 DataMapper::setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/server.db")
 DataMapper::Model.raise_on_save_failure = true  # globally across all models
 
@@ -20,6 +20,7 @@ class Response
   property :http_delete, Boolean, :default => true
   property :http_status, Integer, :default => 200
   property :received_data, String, :length => 4096
+  property :match_received_data, Boolean, :default => false
   property :repeat_counter, Integer, :default => 0
   property :paused, Boolean, :default => false
   property :mode, String
@@ -33,13 +34,30 @@ class Response
   property :requested_at, DateTime
 
   self.per_page = 30
-  
+
+  before :save do |response|
+    Response.normalize_received_data!(response.received_data)
+  end
+
+  def self.normalize_received_data!(data)
+    data.gsub!(/\r\n?/, "\n")
+    data.strip!
+  end
+
   def self.sent(options = {})
     all(options.merge!({:conditions => [ 'requested_at IS NOT NULL' ], :order => [:requested_at.desc]}))
   end
   
   def self.scheduled(options = {})
-    all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:paused.asc, :requested_at.asc]}))
+    received_data = options[:received_data]
+    options.delete :received_data
+    
+    query = all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:paused.asc, :requested_at.asc]}))
+    if received_data
+        normalize_received_data!(received_data)
+        query = query & (all(match_received_data: false) | all(received_data: received_data))
+    end
+    query
   end
   
   def self.exists_for_path?(path)
@@ -138,14 +156,18 @@ class MockServer < Sinatra::Base
     else
       @resp = Response.get(params[:id])
     end
-    
+
+    # http://stackoverflow.com/questions/14217101/what-character-represents-a-new-line-in-a-text-area
     params[:forward].strip!
     params[:file].strip!
+
     @resp.attributes = {  :path => params[:path],
                           :http_get => params[:http_get] != nil,
                           :http_post => params[:http_post] != nil,
                           :http_put => params[:http_put] != nil,
                           :http_delete => params[:http_delete] != nil,
+                          :match_received_data => params[:match_received_data] != nil,
+                          :received_data => params[:received_data],
                           :body => params[:body], 
                           :http_status => params[:http_status].to_i,
                           :repeat_counter => params[:repeat_counter],
