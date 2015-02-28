@@ -52,7 +52,7 @@
           %label.control-label{:for => "content_type"} Conent
           .controls
             %select#content_type{:name => "conent_type"}
-              - %w(text/html application/json application/javascript).each do |type|
+              - %w(text/html application/json application/javascript application/xml).each do |type|
                 %option{:value => "type", :selected => ("selected" if type == @resp.content_type)}= type
         .control-group
           %label.control-label{:for => "body"} Response
