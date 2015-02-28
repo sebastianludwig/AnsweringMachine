@@ -4,18 +4,13 @@
 
 %ul.nav.nav-tabs
   %li.active
-    %a{:href => "#tab_scheduled", "data-toggle" => "tab"}
+    %a{href: "/a-machine/scheduled", data: {toggle: "tabajax", target: "#tab_scheduled"} }
       %i.icon-calendar
       Scheduled
   %li
-    %a{:href => "#tab_sent", "data-toggle" => "tab"}
+    %a{href: "/a-machine/sent", data: {toggle: "tabajax", target: "#tab_sent"} }
       %i.icon-list
       Sent
 .tab-content
-  .tab-pane.active#tab_scheduled
-    %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @scheduled_responses, :locals => { :actions => [:pause, :edit, :delete] }
-  .tab-pane#tab_sent
-    %ul.unstyled.list-striped.list-hover
-      = partial :request_row, :collection => @sent_responses, :locals => { :actions => [:resend, :delete] }
-    = will_paginate @sent_responses, renderer: BootstrapPagination::Sinatra
+  = partial :tab_scheduled, locals: { scheduled: @scheduled_responses }
+  = partial :tab_sent, locals: { sent: @sent_responses }

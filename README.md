@@ -23,7 +23,6 @@ Use ${ruby:<code>} to substitute the expression with the result of the evaluated
 Better don't use it right now, as the license is still uncertain and may change.
 
 # TODO
-- auto refresh (AJAX)
 - Regex matching / forwarding
 - write README.md
 - group indentical responses

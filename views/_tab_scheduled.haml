@@ -1,0 +1,3 @@
+.tab-pane.active#tab_scheduled
+  %ul.unstyled.list-striped.list-hover
+    = partial :request_row, :collection => scheduled, :locals => { :actions => [:pause, :edit, :delete] }

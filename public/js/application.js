@@ -1,4 +1,4 @@
-$('.show-body').click(function(event) {
+$('.tab-pane').on('click', '.show-body', function(event) {
   $(this).closest('li').find('.response-body').toggle();
 });
 
@@ -91,3 +91,19 @@ $('.delete,.put').click(function() {
 function removeHttpHeader(link) {
   $(link).closest('.http-header').remove()
 }
+
+$('[data-toggle="tabajax"]').click(function(e) {
+    // http://jsfiddle.net/adrienne/La2765jn/
+    var $this = $(this),
+        loadurl = $this.attr('href'),
+        targ = $this.attr('data-target');
+
+    $.get(loadurl, function(data) {
+        data = $(data)
+        data.find('.response-body').hide();
+        $(targ).html(data.html());
+    });
+
+    $this.tab('show');
+    return false;
+});

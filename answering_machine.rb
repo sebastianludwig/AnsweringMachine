@@ -108,6 +108,18 @@ class MockServer < Sinatra::Base
     alias_method :h, :escape_html
   end
   
+  get '/a-machine/scheduled' do
+    @scheduled_responses = Response.scheduled
+  
+    partial :tab_scheduled, locals: { scheduled: @scheduled_responses }
+  end 
+
+  get '/a-machine/sent' do
+    @sent_responses = Response.sent.paginate(:page => params[:page])
+  
+    partial :tab_sent, locals: { sent: @sent_responses }
+  end
+
   get '/a-machine/?' do
     @resp = Response.new
     
