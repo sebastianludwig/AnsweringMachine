@@ -253,3 +253,7 @@ td form {
   font-size: 9pt !important;
   line-height: 12pt !important;
 }
+
+.pagination {
+    text-align: center;
+}

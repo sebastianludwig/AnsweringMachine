@@ -3,6 +3,9 @@ require 'net/http'
 require 'partials'
 require 'view_helper'
 
+require 'will_paginate'
+require 'will_paginate/data_mapper'
+
 #DataMapper::Logger.new(STDOUT, :debug)
 DataMapper::setup(:default, "sqlite3://#{File.dirname(File.expand_path(__FILE__))}/server.db")
 DataMapper::Model.raise_on_save_failure = true  # globally across all models
@@ -28,9 +31,11 @@ class Response
   property :raw_headers, String
   property :body, Text, :length => 500000
   property :requested_at, DateTime
+
+  self.per_page = 30
   
   def self.sent(options = {})
-    all(options.merge({:conditions => [ 'requested_at IS NOT NULL' ], :order => [:requested_at.desc]}))
+    all(options.merge!({:conditions => [ 'requested_at IS NOT NULL' ], :order => [:requested_at.desc]}))
   end
   
   def self.scheduled(options = {})
@@ -97,6 +102,7 @@ class MockServer < Sinatra::Base
   
   helpers Sinatra::Partials
   helpers ViewHelper
+  helpers WillPaginate::Sinatra::Helpers
   helpers do
     include Rack::Utils
     alias_method :h, :escape_html
@@ -200,8 +206,8 @@ private
 
   def render_index
     @requests = Response.all(:fields => [:path], :unique => true, :order => [:path.asc]).map { |r| r.path }
-  
-    @sent_responses = Response.sent
+
+    @sent_responses = Response.sent.paginate(:page => params[:page])
     @scheduled_responses = Response.scheduled
   
     haml :index
