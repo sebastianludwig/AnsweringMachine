@@ -66,7 +66,7 @@ $('.nav-tabs li a').click(function() {
   $('.nav-tabs input').attr('value', $(this).data('value'))
 });
 
-$('.delete,.put').click(function() {
+$('.tab-pane').on('click', '.delete,.put', function(event) {
   var method = 'POST';
   if ($(this).hasClass('put')) {
     method = 'PUT';
