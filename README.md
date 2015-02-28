@@ -5,7 +5,7 @@
 ```
 git clone
 bundle install
-bundle exec rackup
+(bundle exec) rackup
 ```
 
 # Usage
@@ -24,6 +24,7 @@ Better don't use it right now, as the license is still uncertain and may change.
 
 # TODO
 - AJAX deletion/update
+- POST/PUT forwarding
 - Regex matching / forwarding
 - write README.md
 - group indentical responses
