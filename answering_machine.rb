@@ -23,7 +23,7 @@ class Response
   property :forward, String, :length => 256
   property :file, String, :length => 256
   property :tag, String, :length => 64
-  property :delay, Float, :default => 0
+  property :delay, Float, :default => 0.0
   property :content_type, String
   property :raw_headers, String
   property :body, Text, :length => 500000
