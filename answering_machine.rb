@@ -46,19 +46,20 @@ class Response
   end
 
   def self.sent(options = {})
-    all(options.merge!({:conditions => [ 'requested_at IS NOT NULL' ], :order => [:requested_at.desc]}))
+    all(options.merge({:conditions => [ 'requested_at IS NOT NULL' ], :order => [:requested_at.desc]}))
   end
   
   def self.scheduled(options = {})
     received_data = options[:received_data]
     options.delete :received_data
     
-    query = all(options.merge!({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ]}))
+    order = [:paused.asc, :requested_at.asc]
+    query = all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => order}))
     if received_data
         normalize_received_data!(received_data)
-        query = query & (all(match_received_data: false) | all(received_data: received_data))
+        query = query & (all(match_received_data: false, :order => order) | all(received_data: received_data, :order => order))
     end
-    query & all(:order => [:paused.asc, :requested_at.asc])
+    query
   end
   
   def self.exists_for_path?(path)
