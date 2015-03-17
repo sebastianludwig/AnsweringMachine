@@ -53,12 +53,12 @@ class Response
     received_data = options[:received_data]
     options.delete :received_data
     
-    query = all(options.merge({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ], :order => [:paused.asc, :requested_at.asc]}))
+    query = all(options.merge!({:conditions => [ "requested_at IS NULL OR repeat_counter <> 0" ]}))
     if received_data
         normalize_received_data!(received_data)
         query = query & (all(match_received_data: false) | all(received_data: received_data))
     end
-    query
+    query & all(:order => [:paused.asc, :requested_at.asc])
   end
   
   def self.exists_for_path?(path)
